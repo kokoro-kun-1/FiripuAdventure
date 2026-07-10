@@ -8,14 +8,15 @@ script = ExtResource("1")
 [node name="Panel" type="Panel" parent="."]
 offset_left = 12.0
 offset_top = 12.0
-offset_right = 548.0
-offset_bottom = 214.0
+offset_right = 584.0
+offset_bottom = 246.0
 
 [node name="VBox" type="VBoxContainer" parent="Panel"]
-offset_left = 10.0
-offset_top = 10.0
-offset_right = 520.0
-offset_bottom = 190.0
+offset_left = 12.0
+offset_top = 12.0
+offset_right = 560.0
+offset_bottom = 222.0
+theme_override_constants/separation = 6
 
 [node name="FaunaLabel" type="Label" parent="Panel/VBox"]
 text = "Diario de Naturaleza: 0/4"
@@ -30,16 +31,31 @@ text = "Medalla: Pendiente"
 text = "Firipu: quieto"
 
 [node name="ControlsLabel" type="Label" parent="Panel/VBox"]
-text = "Xbox: Stick izq. mover · A saltar/aceptar · X interactuar · RB usar objeto · B esquivar · LB/RT correr | Teclado: A/D/W/S · Espacio · E · Click · F5 guardar · F9 cargar"
+text = "Controles: A/D/W/S mover · Espacio saltar · E interactuar · Click usar objeto · F5 guardar · F9 cargar"
 autowrap_mode = 3
 
+[node name="SaveLoadTitle" type="Label" parent="Panel/VBox"]
+text = "Partida rápida"
+horizontal_alignment = 1
+
 [node name="SaveLoadButtons" type="HBoxContainer" parent="Panel/VBox"]
+theme_override_constants/separation = 12
+alignment = 1
 
 [node name="SaveButton" type="Button" parent="Panel/VBox/SaveLoadButtons"]
-text = "Guardar"
+custom_minimum_size = Vector2(160, 38)
+text = "Guardar  F5"
+tooltip_text = "Guarda posición, coleccionables, medalla y avance del mundo."
 
 [node name="LoadButton" type="Button" parent="Panel/VBox/SaveLoadButtons"]
-text = "Cargar"
+custom_minimum_size = Vector2(160, 38)
+text = "Cargar  F9"
+tooltip_text = "Carga la última partida guardada."
+
+[node name="SaveLoadHint" type="Label" parent="Panel/VBox"]
+text = "El guardado conserva fauna registrada, posición, medalla y mundo completado."
+horizontal_alignment = 1
+autowrap_mode = 3
 
 [node name="BottomPanel" type="Panel" parent="."]
 offset_left = 120.0

@@ -29,8 +29,8 @@ func _ready() -> void:
 	load_button.pressed.connect(_on_load_button_pressed)
 	victory_panel.visible = false
 	start_panel.visible = true
-	start_label.text = "Firipu Adventure\nMundo 1: Biobío Silvestre\n\nObjetivo:\nRegistre 4 especies, use un objeto contra el robot\ny recupere la Medalla del Bosque y Río.\n\nEnter / botón A para comenzar"
-	controls_label.text = "Xbox: Stick izq. mover · A saltar/aceptar · X interactuar · RB usar objeto · B esquivar · LB/RT correr | Teclado: A/D/W/S · Espacio · E · Click · F5 guardar · F9 cargar"
+	start_label.text = "Firipu Adventure\nMundo 1: Biobío Silvestre\n\nObjetivo:\nRegistre 4 especies, use un objeto contra el robot\ny recupere la Medalla del Bosque y Río.\n\nEnter / botón A para comenzar\nF5 guardar · F9 cargar"
+	controls_label.text = "Controles: A/D/W/S mover · Espacio saltar · E interactuar · Click usar objeto · F5 guardar · F9 cargar"
 	show_message("Presione Enter o botón A del mando Xbox para comenzar la aventura.")
 
 func _ensure_xbox_start_action() -> void:
