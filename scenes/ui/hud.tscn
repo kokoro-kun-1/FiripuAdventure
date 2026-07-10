@@ -74,19 +74,40 @@ vertical_alignment = 1
 autowrap_mode = 3
 
 [node name="StartPanel" type="Panel" parent="."]
-offset_left = 290.0
-offset_top = 132.0
-offset_right = 990.0
-offset_bottom = 548.0
+offset_left = 230.0
+offset_top = 82.0
+offset_right = 1050.0
+offset_bottom = 596.0
 
-[node name="StartLabel" type="Label" parent="StartPanel"]
-offset_left = 28.0
+[node name="StartVBox" type="VBoxContainer" parent="StartPanel"]
+offset_left = 34.0
 offset_top = 28.0
-offset_right = 672.0
-offset_bottom = 388.0
-text = "Firipu Adventure\nMundo 1: Biobío Silvestre\n\nEnter / botón A para comenzar"
+offset_right = 786.0
+offset_bottom = 486.0
+theme_override_constants/separation = 13
+alignment = 1
+
+[node name="StartTitleLabel" type="Label" parent="StartPanel/StartVBox"]
+text = "Firipu Adventure"
 horizontal_alignment = 1
-vertical_alignment = 1
+
+[node name="StartWorldLabel" type="Label" parent="StartPanel/StartVBox"]
+text = "Mundo 1 · Biobío Silvestre"
+horizontal_alignment = 1
+
+[node name="StartObjectiveLabel" type="Label" parent="StartPanel/StartVBox"]
+text = "Objetivo: registre 4 especies, use un objeto contra el robot y recupere la medalla."
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="StartControlsLabel" type="Label" parent="StartPanel/StartVBox"]
+text = "Controles\n• A/D: avanzar · W/S: profundidad limitada\n• Espacio / A: saltar · Shift / LB: correr · Ctrl / B: esquivar\n• E / X: interactuar · Click / RB: usar objeto\n• F5 guardar · F9 cargar · Esc / Start pausa"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="StartHintLabel" type="Label" parent="StartPanel/StartVBox"]
+text = "Presione Enter, botón A o Start para comenzar"
+horizontal_alignment = 1
 autowrap_mode = 3
 
 [node name="PausePanel" type="Panel" parent="."]

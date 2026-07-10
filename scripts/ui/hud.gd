@@ -14,7 +14,11 @@ signal exit_requested
 @onready var load_button: Button = $Panel/VBox/SaveLoadButtons/LoadButton
 @onready var hint_label: Label = $BottomPanel/HintLabel
 @onready var start_panel: Panel = $StartPanel
-@onready var start_label: Label = $StartPanel/StartLabel
+@onready var start_title_label: Label = $StartPanel/StartVBox/StartTitleLabel
+@onready var start_world_label: Label = $StartPanel/StartVBox/StartWorldLabel
+@onready var start_objective_label: Label = $StartPanel/StartVBox/StartObjectiveLabel
+@onready var start_controls_label: Label = $StartPanel/StartVBox/StartControlsLabel
+@onready var start_hint_label: Label = $StartPanel/StartVBox/StartHintLabel
 @onready var pause_panel: Panel = $PausePanel
 @onready var pause_continue_button: Button = $PausePanel/PauseVBox/ContinueButton
 @onready var pause_save_button: Button = $PausePanel/PauseVBox/SaveButton
@@ -52,9 +56,13 @@ func _ready() -> void:
 	victory_panel.visible = false
 	pause_panel.visible = false
 	start_panel.visible = true
-	start_label.text = "Firipu Adventure\nMundo 1: Biobío Silvestre\n\nObjetivo:\nRegistre 4 especies, use un objeto contra el robot\ny recupere la Medalla del Bosque y Río.\n\nEnter / botón A para comenzar\nF5 guardar · F9 cargar · Esc pausa"
-	controls_label.text = "Controles: A/D/W/S mover · Espacio saltar · E interactuar · Click usar objeto · F5 guardar · F9 cargar · Esc pausa"
-	show_message("Presione Enter o botón A del mando Xbox para comenzar la aventura.")
+	start_title_label.text = "Firipu Adventure"
+	start_world_label.text = "Mundo 1 · Biobío Silvestre"
+	start_objective_label.text = "Objetivo: registre 4 especies del Diario de Naturaleza, tome una piedra o rama, enfrente al robot y recupere la Medalla del Bosque y Río."
+	start_controls_label.text = "Controles\n• A/D: avanzar y retroceder · W/S: profundidad limitada\n• Espacio / A: saltar · Shift / LB: correr · Ctrl / B: esquivar\n• E / X: interactuar · Click / RB: usar objeto\n• F5 guardar · F9 cargar · Esc / Start pausa"
+	start_hint_label.text = "Presione Enter, botón A o Start para comenzar"
+	controls_label.text = "Controles: A/D mover · W/S profundidad · Espacio saltar · E interactuar · Click usar objeto · F5/F9 guardar/cargar · Esc pausa"
+	show_message("Pantalla inicial lista: revise objetivo y controles, luego presione Enter o botón A.")
 
 func _ensure_ui_actions() -> void:
 	_ensure_xbox_start_action()
