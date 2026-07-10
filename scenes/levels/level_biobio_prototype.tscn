@@ -234,6 +234,8 @@ position = Vector3(18, 0.6, 0)
 target_path = NodePath("../Firipu")
 
 [node name="MedalArea" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 2
 position = Vector3(25, 1.15, 0)
 
 [node name="MedalVisual" type="MeshInstance3D" parent="MedalArea"]
