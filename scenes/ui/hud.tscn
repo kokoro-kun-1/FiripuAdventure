@@ -1,11 +1,78 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=7 format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/hud.gd" id="1"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hud_panel"]
+bg_color = Color(0.06, 0.17, 0.13, 0.82)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.33, 0.74, 0.45, 0.85)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+shadow_color = Color(0, 0, 0, 0.35)
+shadow_size = 8
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_modal_panel"]
+bg_color = Color(0.075, 0.22, 0.17, 0.94)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.95, 0.72, 0.28, 0.95)
+corner_radius_top_left = 22
+corner_radius_top_right = 22
+corner_radius_bottom_right = 22
+corner_radius_bottom_left = 22
+shadow_color = Color(0, 0, 0, 0.45)
+shadow_size = 14
+shadow_offset = Vector2(0, 5)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hint_panel"]
+bg_color = Color(0.04, 0.10, 0.13, 0.86)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.31, 0.67, 0.86, 0.75)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_button"]
+bg_color = Color(0.16, 0.43, 0.30, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.78, 0.93, 0.58, 0.90)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_exit_button"]
+bg_color = Color(0.48, 0.20, 0.16, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1.00, 0.68, 0.45, 0.92)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1")
 
 [node name="Panel" type="Panel" parent="."]
+theme_override_styles/panel = SubResource("StyleBoxFlat_hud_panel")
 offset_left = 12.0
 offset_top = 12.0
 offset_right = 584.0
@@ -19,22 +86,34 @@ offset_bottom = 222.0
 theme_override_constants/separation = 6
 
 [node name="FaunaLabel" type="Label" parent="Panel/VBox"]
+theme_override_colors/font_color = Color(0.88, 1, 0.78, 1)
+theme_override_font_sizes/font_size = 18
 text = "Diario de Naturaleza: 0/4"
 
 [node name="ObjectLabel" type="Label" parent="Panel/VBox"]
+theme_override_colors/font_color = Color(0.88, 0.96, 1, 1)
+theme_override_font_sizes/font_size = 17
 text = "Objeto: Ninguno"
 
 [node name="MedalLabel" type="Label" parent="Panel/VBox"]
+theme_override_colors/font_color = Color(1, 0.88, 0.46, 1)
+theme_override_font_sizes/font_size = 17
 text = "Medalla: Pendiente"
 
 [node name="StateLabel" type="Label" parent="Panel/VBox"]
+theme_override_colors/font_color = Color(0.94, 0.94, 0.86, 1)
+theme_override_font_sizes/font_size = 16
 text = "Firipu: quieto"
 
 [node name="ControlsLabel" type="Label" parent="Panel/VBox"]
+theme_override_colors/font_color = Color(0.78, 0.92, 0.95, 1)
+theme_override_font_sizes/font_size = 14
 text = "Controles: A/D/W/S mover · Espacio saltar · E interactuar · Click usar objeto · F5 guardar · F9 cargar · Esc pausa"
 autowrap_mode = 3
 
 [node name="SaveLoadTitle" type="Label" parent="Panel/VBox"]
+theme_override_colors/font_color = Color(1, 0.86, 0.50, 1)
+theme_override_font_sizes/font_size = 16
 text = "Partida rápida"
 horizontal_alignment = 1
 
@@ -43,27 +122,38 @@ theme_override_constants/separation = 12
 alignment = 1
 
 [node name="SaveButton" type="Button" parent="Panel/VBox/SaveLoadButtons"]
+theme_override_styles/normal = SubResource("StyleBoxFlat_button")
+theme_override_colors/font_color = Color(0.96, 1, 0.90, 1)
+theme_override_font_sizes/font_size = 16
 custom_minimum_size = Vector2(160, 38)
 text = "Guardar  F5"
 tooltip_text = "Guarda posición, coleccionables, medalla y avance del mundo."
 
 [node name="LoadButton" type="Button" parent="Panel/VBox/SaveLoadButtons"]
+theme_override_styles/normal = SubResource("StyleBoxFlat_button")
+theme_override_colors/font_color = Color(0.96, 1, 0.90, 1)
+theme_override_font_sizes/font_size = 16
 custom_minimum_size = Vector2(160, 38)
 text = "Cargar  F9"
 tooltip_text = "Carga la última partida guardada."
 
 [node name="SaveLoadHint" type="Label" parent="Panel/VBox"]
+theme_override_colors/font_color = Color(0.70, 0.86, 0.78, 1)
+theme_override_font_sizes/font_size = 13
 text = "El guardado conserva fauna registrada, posición, medalla y mundo completado."
 horizontal_alignment = 1
 autowrap_mode = 3
 
 [node name="BottomPanel" type="Panel" parent="."]
+theme_override_styles/panel = SubResource("StyleBoxFlat_hint_panel")
 offset_left = 120.0
 offset_top = 628.0
 offset_right = 1160.0
 offset_bottom = 708.0
 
 [node name="HintLabel" type="Label" parent="BottomPanel"]
+theme_override_colors/font_color = Color(0.92, 0.98, 1, 1)
+theme_override_font_sizes/font_size = 18
 offset_left = 14.0
 offset_top = 10.0
 offset_right = 1026.0
@@ -74,6 +164,7 @@ vertical_alignment = 1
 autowrap_mode = 3
 
 [node name="StartPanel" type="Panel" parent="."]
+theme_override_styles/panel = SubResource("StyleBoxFlat_modal_panel")
 offset_left = 230.0
 offset_top = 82.0
 offset_right = 1050.0
@@ -88,29 +179,40 @@ theme_override_constants/separation = 13
 alignment = 1
 
 [node name="StartTitleLabel" type="Label" parent="StartPanel/StartVBox"]
+theme_override_colors/font_color = Color(1, 0.90, 0.45, 1)
+theme_override_font_sizes/font_size = 34
 text = "Firipu Adventure"
 horizontal_alignment = 1
 
 [node name="StartWorldLabel" type="Label" parent="StartPanel/StartVBox"]
+theme_override_colors/font_color = Color(0.72, 1, 0.72, 1)
+theme_override_font_sizes/font_size = 24
 text = "Mundo 1 · Biobío Silvestre"
 horizontal_alignment = 1
 
 [node name="StartObjectiveLabel" type="Label" parent="StartPanel/StartVBox"]
+theme_override_colors/font_color = Color(0.96, 0.98, 0.88, 1)
+theme_override_font_sizes/font_size = 18
 text = "Objetivo: registre 4 especies, use un objeto contra el robot y recupere la medalla."
 horizontal_alignment = 1
 autowrap_mode = 3
 
 [node name="StartControlsLabel" type="Label" parent="StartPanel/StartVBox"]
+theme_override_colors/font_color = Color(0.80, 0.94, 1, 1)
+theme_override_font_sizes/font_size = 17
 text = "Controles\n• A/D: avanzar · W/S: profundidad limitada\n• Espacio / A: saltar · Shift / LB: correr · Ctrl / B: esquivar\n• E / X: interactuar · Click / RB: usar objeto\n• F5 guardar · F9 cargar · Esc / Start pausa"
 horizontal_alignment = 1
 autowrap_mode = 3
 
 [node name="StartHintLabel" type="Label" parent="StartPanel/StartVBox"]
+theme_override_colors/font_color = Color(1, 0.84, 0.42, 1)
+theme_override_font_sizes/font_size = 20
 text = "Presione Enter, botón A o Start para comenzar"
 horizontal_alignment = 1
 autowrap_mode = 3
 
 [node name="PausePanel" type="Panel" parent="."]
+theme_override_styles/panel = SubResource("StyleBoxFlat_modal_panel")
 visible = false
 offset_left = 410.0
 offset_top = 150.0
@@ -126,31 +228,48 @@ theme_override_constants/separation = 14
 alignment = 1
 
 [node name="PauseTitle" type="Label" parent="PausePanel/PauseVBox"]
+theme_override_colors/font_color = Color(1, 0.88, 0.45, 1)
+theme_override_font_sizes/font_size = 28
 text = "Pausa"
 horizontal_alignment = 1
 
 [node name="PauseHint" type="Label" parent="PausePanel/PauseVBox"]
+theme_override_colors/font_color = Color(0.90, 0.96, 0.88, 1)
+theme_override_font_sizes/font_size = 16
 text = "Puede guardar o cargar el avance antes de salir."
 horizontal_alignment = 1
 autowrap_mode = 3
 
 [node name="ContinueButton" type="Button" parent="PausePanel/PauseVBox"]
+theme_override_styles/normal = SubResource("StyleBoxFlat_button")
+theme_override_colors/font_color = Color(0.96, 1, 0.90, 1)
+theme_override_font_sizes/font_size = 16
 custom_minimum_size = Vector2(300, 42)
 text = "Continuar"
 
 [node name="SaveButton" type="Button" parent="PausePanel/PauseVBox"]
+theme_override_styles/normal = SubResource("StyleBoxFlat_button")
+theme_override_colors/font_color = Color(0.96, 1, 0.90, 1)
+theme_override_font_sizes/font_size = 16
 custom_minimum_size = Vector2(300, 42)
 text = "Guardar partida"
 
 [node name="LoadButton" type="Button" parent="PausePanel/PauseVBox"]
+theme_override_styles/normal = SubResource("StyleBoxFlat_button")
+theme_override_colors/font_color = Color(0.96, 1, 0.90, 1)
+theme_override_font_sizes/font_size = 16
 custom_minimum_size = Vector2(300, 42)
 text = "Cargar partida"
 
 [node name="ExitButton" type="Button" parent="PausePanel/PauseVBox"]
+theme_override_styles/normal = SubResource("StyleBoxFlat_exit_button")
+theme_override_colors/font_color = Color(1, 0.95, 0.88, 1)
+theme_override_font_sizes/font_size = 16
 custom_minimum_size = Vector2(300, 42)
 text = "Salir del prototipo"
 
 [node name="VictoryPanel" type="Panel" parent="."]
+theme_override_styles/panel = SubResource("StyleBoxFlat_modal_panel")
 visible = false
 offset_left = 260.0
 offset_top = 118.0
@@ -166,15 +285,21 @@ theme_override_constants/separation = 12
 alignment = 1
 
 [node name="VictoryTitleLabel" type="Label" parent="VictoryPanel/VictoryVBox"]
+theme_override_colors/font_color = Color(1, 0.89, 0.38, 1)
+theme_override_font_sizes/font_size = 30
 text = "¡Mundo 1 completado!"
 horizontal_alignment = 1
 
 [node name="VictorySummaryLabel" type="Label" parent="VictoryPanel/VictoryVBox"]
+theme_override_colors/font_color = Color(0.92, 1, 0.84, 1)
+theme_override_font_sizes/font_size = 17
 text = "Resumen de aventura"
 horizontal_alignment = 1
 autowrap_mode = 3
 
 [node name="VictoryNextLabel" type="Label" parent="VictoryPanel/VictoryVBox"]
+theme_override_colors/font_color = Color(0.80, 0.92, 1, 1)
+theme_override_font_sizes/font_size = 15
 text = "Siguiente paso: próxima región en futura versión."
 horizontal_alignment = 1
 autowrap_mode = 3
@@ -184,13 +309,22 @@ theme_override_constants/separation = 12
 alignment = 1
 
 [node name="ContinueButton" type="Button" parent="VictoryPanel/VictoryVBox/VictoryButtons"]
+theme_override_styles/normal = SubResource("StyleBoxFlat_button")
+theme_override_colors/font_color = Color(0.96, 1, 0.90, 1)
+theme_override_font_sizes/font_size = 16
 custom_minimum_size = Vector2(190, 42)
 text = "Seguir explorando"
 
 [node name="SaveButton" type="Button" parent="VictoryPanel/VictoryVBox/VictoryButtons"]
+theme_override_styles/normal = SubResource("StyleBoxFlat_button")
+theme_override_colors/font_color = Color(0.96, 1, 0.90, 1)
+theme_override_font_sizes/font_size = 16
 custom_minimum_size = Vector2(170, 42)
 text = "Guardar victoria"
 
 [node name="ExitButton" type="Button" parent="VictoryPanel/VictoryVBox/VictoryButtons"]
+theme_override_styles/normal = SubResource("StyleBoxFlat_exit_button")
+theme_override_colors/font_color = Color(1, 0.95, 0.88, 1)
+theme_override_font_sizes/font_size = 16
 custom_minimum_size = Vector2(160, 42)
 text = "Salir"
