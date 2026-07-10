@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/items/throwable_item.gd" id="1"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_piedra"]
+radius = 0.18
+height = 0.36
+
+[sub_resource type="SphereShape3D" id="SphereShape_piedra"]
+radius = 0.35
+
+[node name="Piedra" type="Area3D"]
+script = ExtResource("1")
+label = "Piedra"
+
+[node name="Body" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_piedra")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape_piedra")

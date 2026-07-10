@@ -1,0 +1,115 @@
+[gd_scene load_steps=15 format=3]
+
+[ext_resource type="Script" path="res://scripts/enemies/robot_enemy.gd" id="1"]
+
+[sub_resource type="StandardMaterial3D" id="MatShell"]
+albedo_color = Color(0.16, 0.18, 0.24, 1)
+metallic = 0.35
+roughness = 0.42
+
+[sub_resource type="StandardMaterial3D" id="MatPlate"]
+albedo_color = Color(0.35, 0.42, 0.52, 1)
+metallic = 0.5
+roughness = 0.35
+
+[sub_resource type="StandardMaterial3D" id="MatEye"]
+albedo_color = Color(1.0, 0.12, 0.05, 1)
+emission_enabled = true
+emission = Color(1.0, 0.05, 0.0, 1)
+emission_energy_multiplier = 1.2
+
+[sub_resource type="StandardMaterial3D" id="MatLeg"]
+albedo_color = Color(0.08, 0.09, 0.11, 1)
+metallic = 0.3
+
+[sub_resource type="BoxMesh" id="BodyMesh"]
+size = Vector3(1.05, 0.42, 1.00)
+
+[sub_resource type="SphereMesh" id="ShellMesh"]
+radius = 0.56
+height = 0.68
+
+[sub_resource type="BoxMesh" id="SmallBox"]
+size = Vector3(0.24, 0.24, 0.24)
+
+[sub_resource type="SphereMesh" id="EyeMesh"]
+radius = 0.08
+height = 0.16
+
+[sub_resource type="BoxMesh" id="LegMesh"]
+size = Vector3(0.50, 0.12, 0.12)
+
+[sub_resource type="BoxShape3D" id="BoxShape_robot"]
+size = Vector3(1.05, 0.55, 1.08)
+
+[node name="EscarabajoRobot" type="CharacterBody3D"]
+script = ExtResource("1")
+
+[node name="Body" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.42, 0)
+mesh = SubResource("BodyMesh")
+material_override = SubResource("MatShell")
+
+[node name="RoundedShell" type="MeshInstance3D" parent="Body"]
+position = Vector3(-0.05, 0.22, 0)
+scale = Vector3(1.15, 0.45, 0.95)
+mesh = SubResource("ShellMesh")
+material_override = SubResource("MatPlate")
+
+[node name="HeadPlate" type="MeshInstance3D" parent="Body"]
+position = Vector3(0.58, 0.04, 0)
+scale = Vector3(0.78, 0.75, 1.0)
+mesh = SubResource("SmallBox")
+material_override = SubResource("MatPlate")
+
+[node name="EyeA" type="MeshInstance3D" parent="Body"]
+position = Vector3(0.71, 0.15, -0.16)
+mesh = SubResource("EyeMesh")
+material_override = SubResource("MatEye")
+
+[node name="EyeB" type="MeshInstance3D" parent="Body"]
+position = Vector3(0.71, 0.15, 0.16)
+mesh = SubResource("EyeMesh")
+material_override = SubResource("MatEye")
+
+[node name="AntennaA" type="MeshInstance3D" parent="Body"]
+position = Vector3(0.72, 0.38, -0.16)
+rotation = Vector3(0, 0, 0.45)
+scale = Vector3(0.22, 1.0, 0.22)
+mesh = SubResource("LegMesh")
+material_override = SubResource("MatLeg")
+
+[node name="AntennaB" type="MeshInstance3D" parent="Body"]
+position = Vector3(0.72, 0.38, 0.16)
+rotation = Vector3(0, 0, 0.45)
+scale = Vector3(0.22, 1.0, 0.22)
+mesh = SubResource("LegMesh")
+material_override = SubResource("MatLeg")
+
+[node name="LegL1" type="MeshInstance3D" parent="Body"]
+position = Vector3(0.20, -0.16, -0.52)
+rotation = Vector3(0, 0.3, -0.25)
+mesh = SubResource("LegMesh")
+material_override = SubResource("MatLeg")
+
+[node name="LegL2" type="MeshInstance3D" parent="Body"]
+position = Vector3(-0.20, -0.16, -0.52)
+rotation = Vector3(0, -0.2, -0.25)
+mesh = SubResource("LegMesh")
+material_override = SubResource("MatLeg")
+
+[node name="LegR1" type="MeshInstance3D" parent="Body"]
+position = Vector3(0.20, -0.16, 0.52)
+rotation = Vector3(0, -0.3, 0.25)
+mesh = SubResource("LegMesh")
+material_override = SubResource("MatLeg")
+
+[node name="LegR2" type="MeshInstance3D" parent="Body"]
+position = Vector3(-0.20, -0.16, 0.52)
+rotation = Vector3(0, 0.2, 0.25)
+mesh = SubResource("LegMesh")
+material_override = SubResource("MatLeg")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.42, 0)
+shape = SubResource("BoxShape_robot")

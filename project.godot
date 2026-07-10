@@ -1,0 +1,16 @@
+; Engine configuration file.
+; Firipu Adventure — Godot 4 prototype 0.1
+
+config_version=5
+
+[application]
+config/name="Firipu Adventure"
+run/main_scene="res://scenes/levels/level_biobio_prototype.tscn"
+config/features=PackedStringArray("4.2", "Forward Plus")
+config/icon="res://icon.svg"
+
+[rendering]
+renderer/rendering_method="forward_plus"
+
+[autoload]
+SaveGame="res://autoload/SaveGame.gd"

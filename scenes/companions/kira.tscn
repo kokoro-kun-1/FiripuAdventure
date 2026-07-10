@@ -1,0 +1,130 @@
+[gd_scene load_steps=14 format=3]
+
+[ext_resource type="Script" path="res://scripts/companions/companion_follow.gd" id="1"]
+
+[sub_resource type="StandardMaterial3D" id="MatFur"]
+albedo_color = Color(0.64, 0.38, 0.20, 1)
+
+[sub_resource type="StandardMaterial3D" id="MatChest"]
+albedo_color = Color(0.96, 0.88, 0.74, 1)
+
+[sub_resource type="StandardMaterial3D" id="MatEar"]
+albedo_color = Color(0.34, 0.17, 0.08, 1)
+
+[sub_resource type="StandardMaterial3D" id="MatBandana"]
+albedo_color = Color(0.08, 0.72, 0.32, 1)
+
+[sub_resource type="StandardMaterial3D" id="MatEye"]
+albedo_color = Color(0.02, 0.02, 0.02, 1)
+
+[sub_resource type="StandardMaterial3D" id="MatNose"]
+albedo_color = Color(0.04, 0.03, 0.025, 1)
+
+[sub_resource type="BoxMesh" id="BodyMesh"]
+size = Vector3(0.78, 0.34, 0.52)
+
+[sub_resource type="SphereMesh" id="HeadMesh"]
+radius = 0.22
+height = 0.44
+
+[sub_resource type="CapsuleMesh" id="LegMesh"]
+radius = 0.055
+height = 0.34
+
+[sub_resource type="BoxMesh" id="SmallBox"]
+size = Vector3(0.22, 0.22, 0.22)
+
+[sub_resource type="BoxShape3D" id="BoxShape_kira"]
+size = Vector3(0.76, 0.46, 0.62)
+
+[node name="Kira" type="CharacterBody3D"]
+script = ExtResource("1")
+follow_distance = 2.2
+speed = 5.2
+companion_role = "Kira"
+
+[node name="Body" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.36, 0)
+mesh = SubResource("BodyMesh")
+material_override = SubResource("MatFur")
+
+[node name="Chest" type="MeshInstance3D" parent="Body"]
+position = Vector3(0.18, 0.02, -0.02)
+scale = Vector3(0.70, 0.92, 0.78)
+mesh = SubResource("SmallBox")
+material_override = SubResource("MatChest")
+
+[node name="Head" type="MeshInstance3D" parent="Body"]
+position = Vector3(0.48, 0.21, 0)
+scale = Vector3(1.03, 1.0, 0.96)
+mesh = SubResource("HeadMesh")
+material_override = SubResource("MatFur")
+
+[node name="Snout" type="MeshInstance3D" parent="Body"]
+position = Vector3(0.66, 0.16, 0)
+scale = Vector3(0.55, 0.36, 0.42)
+mesh = SubResource("HeadMesh")
+material_override = SubResource("MatChest")
+
+[node name="Nose" type="MeshInstance3D" parent="Body"]
+position = Vector3(0.76, 0.17, 0)
+scale = Vector3(0.22, 0.18, 0.22)
+mesh = SubResource("HeadMesh")
+material_override = SubResource("MatNose")
+
+[node name="EarA" type="MeshInstance3D" parent="Body"]
+position = Vector3(0.46, 0.48, -0.13)
+rotation = Vector3(0, 0, 0.35)
+scale = Vector3(0.58, 1.18, 0.28)
+mesh = SubResource("SmallBox")
+material_override = SubResource("MatEar")
+
+[node name="EarB" type="MeshInstance3D" parent="Body"]
+position = Vector3(0.46, 0.48, 0.13)
+rotation = Vector3(0, 0, -0.35)
+scale = Vector3(0.58, 1.18, 0.28)
+mesh = SubResource("SmallBox")
+material_override = SubResource("MatEar")
+
+[node name="Tail" type="MeshInstance3D" parent="Body"]
+position = Vector3(-0.50, 0.21, 0)
+rotation = Vector3(0, 0, 0.62)
+scale = Vector3(1.12, 0.28, 0.28)
+mesh = SubResource("SmallBox")
+material_override = SubResource("MatEar")
+
+[node name="Bandana" type="MeshInstance3D" parent="Body"]
+position = Vector3(0.25, 0.15, 0)
+scale = Vector3(1.05, 0.18, 1.42)
+mesh = SubResource("SmallBox")
+material_override = SubResource("MatBandana")
+
+[node name="Eye" type="MeshInstance3D" parent="Body"]
+position = Vector3(0.64, 0.25, -0.08)
+scale = Vector3(0.20, 0.20, 0.20)
+mesh = SubResource("HeadMesh")
+material_override = SubResource("MatEye")
+
+[node name="LegFrontA" type="MeshInstance3D" parent="Body"]
+position = Vector3(0.22, -0.25, -0.13)
+mesh = SubResource("LegMesh")
+material_override = SubResource("MatFur")
+
+[node name="LegFrontB" type="MeshInstance3D" parent="Body"]
+position = Vector3(0.22, -0.25, 0.13)
+mesh = SubResource("LegMesh")
+material_override = SubResource("MatFur")
+
+[node name="LegBackA" type="MeshInstance3D" parent="Body"]
+position = Vector3(-0.24, -0.25, -0.13)
+mesh = SubResource("LegMesh")
+material_override = SubResource("MatFur")
+
+[node name="LegBackB" type="MeshInstance3D" parent="Body"]
+position = Vector3(-0.24, -0.25, 0.13)
+mesh = SubResource("LegMesh")
+material_override = SubResource("MatFur")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.34, 0)
+shape = SubResource("BoxShape_kira")

@@ -1,0 +1,84 @@
+[gd_scene load_steps=14 format=3]
+
+[ext_resource type="Script" path="res://scripts/collectibles/collectible.gd" id="1"]
+
+[sub_resource type="StandardMaterial3D" id="MatGlow"]
+albedo_color = Color(1.0, 0.92, 0.18, 1)
+emission_enabled = true
+emission = Color(1.0, 0.75, 0.12, 1)
+emission_energy_multiplier = 0.8
+
+[sub_resource type="StandardMaterial3D" id="MatRed"]
+albedo_color = Color(0.95, 0.10, 0.08, 1)
+
+[sub_resource type="StandardMaterial3D" id="MatBlue"]
+albedo_color = Color(0.25, 0.55, 1.0, 1)
+transparency = 1
+albedo_color = Color(0.25, 0.55, 1.0, 0.65)
+
+[sub_resource type="StandardMaterial3D" id="MatGreen"]
+albedo_color = Color(0.12, 0.75, 0.32, 1)
+
+[sub_resource type="StandardMaterial3D" id="MatBlack"]
+albedo_color = Color(0.03, 0.03, 0.03, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_collectible"]
+radius = 0.18
+height = 0.36
+
+[sub_resource type="SphereMesh" id="TinySphere"]
+radius = 0.045
+height = 0.09
+
+[sub_resource type="BoxMesh" id="WingMesh"]
+size = Vector3(0.45, 0.04, 0.22)
+
+[sub_resource type="BoxMesh" id="StemMesh"]
+size = Vector3(0.06, 0.55, 0.06)
+
+[sub_resource type="SphereShape3D" id="SphereShape_collectible"]
+radius = 0.5
+
+[node name="Collectible" type="Area3D"]
+script = ExtResource("1")
+
+[node name="Halo" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.08, 0)
+scale = Vector3(1.5, 0.12, 1.5)
+mesh = SubResource("SphereMesh_collectible")
+material_override = SubResource("MatGlow")
+
+[node name="Body" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.18, 0)
+mesh = SubResource("SphereMesh_collectible")
+material_override = SubResource("MatRed")
+
+[node name="WingA" type="MeshInstance3D" parent="."]
+position = Vector3(0.0, 0.19, -0.16)
+rotation = Vector3(0.0, 0.0, 0.18)
+mesh = SubResource("WingMesh")
+material_override = SubResource("MatBlue")
+
+[node name="WingB" type="MeshInstance3D" parent="."]
+position = Vector3(0.0, 0.19, 0.16)
+rotation = Vector3(0.0, 0.0, -0.18)
+mesh = SubResource("WingMesh")
+material_override = SubResource("MatBlue")
+
+[node name="DotA" type="MeshInstance3D" parent="."]
+position = Vector3(0.08, 0.30, -0.05)
+mesh = SubResource("TinySphere")
+material_override = SubResource("MatBlack")
+
+[node name="DotB" type="MeshInstance3D" parent="."]
+position = Vector3(-0.07, 0.25, 0.05)
+mesh = SubResource("TinySphere")
+material_override = SubResource("MatBlack")
+
+[node name="LeafStem" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.12, 0)
+mesh = SubResource("StemMesh")
+material_override = SubResource("MatGreen")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape_collectible")

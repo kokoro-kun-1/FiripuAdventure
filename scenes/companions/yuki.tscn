@@ -1,0 +1,109 @@
+[gd_scene load_steps=13 format=3]
+
+[ext_resource type="Script" path="res://scripts/companions/companion_follow.gd" id="1"]
+
+[sub_resource type="StandardMaterial3D" id="MatFur"]
+albedo_color = Color(0.98, 0.94, 0.84, 1)
+
+[sub_resource type="StandardMaterial3D" id="MatEar"]
+albedo_color = Color(0.88, 0.76, 0.66, 1)
+
+[sub_resource type="StandardMaterial3D" id="MatCollar"]
+albedo_color = Color(0.96, 0.24, 0.70, 1)
+
+[sub_resource type="StandardMaterial3D" id="MatEye"]
+albedo_color = Color(0.02, 0.02, 0.02, 1)
+
+[sub_resource type="StandardMaterial3D" id="MatNose"]
+albedo_color = Color(0.05, 0.035, 0.03, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_yuki"]
+radius = 0.26
+height = 0.52
+
+[sub_resource type="SphereMesh" id="PuffMesh"]
+radius = 0.15
+height = 0.30
+
+[sub_resource type="CapsuleMesh" id="LegMesh"]
+radius = 0.055
+height = 0.32
+
+[sub_resource type="BoxMesh" id="CollarMesh"]
+size = Vector3(0.38, 0.06, 0.42)
+
+[sub_resource type="SphereShape3D" id="SphereShape_yuki"]
+radius = 0.34
+
+[node name="Yuki" type="CharacterBody3D"]
+script = ExtResource("1")
+follow_distance = 1.6
+speed = 4.8
+companion_role = "Yuki"
+
+[node name="Body" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.34, 0)
+scale = Vector3(1.18, 0.82, 0.96)
+mesh = SubResource("SphereMesh_yuki")
+material_override = SubResource("MatFur")
+
+[node name="Head" type="MeshInstance3D" parent="Body"]
+position = Vector3(0.30, 0.20, 0)
+scale = Vector3(0.94, 0.94, 0.94)
+mesh = SubResource("SphereMesh_yuki")
+material_override = SubResource("MatFur")
+
+[node name="Snout" type="MeshInstance3D" parent="Body"]
+position = Vector3(0.52, 0.15, 0)
+scale = Vector3(0.55, 0.40, 0.48)
+mesh = SubResource("PuffMesh")
+material_override = SubResource("MatFur")
+
+[node name="Nose" type="MeshInstance3D" parent="Body"]
+position = Vector3(0.61, 0.17, 0)
+scale = Vector3(0.28, 0.22, 0.28)
+mesh = SubResource("PuffMesh")
+material_override = SubResource("MatNose")
+
+[node name="EarTop" type="MeshInstance3D" parent="Body"]
+position = Vector3(0.25, 0.41, 0.18)
+scale = Vector3(0.82, 1.35, 0.55)
+mesh = SubResource("PuffMesh")
+material_override = SubResource("MatEar")
+
+[node name="HairPuff" type="MeshInstance3D" parent="Body"]
+position = Vector3(0.27, 0.47, 0)
+scale = Vector3(0.92, 0.78, 0.92)
+mesh = SubResource("PuffMesh")
+material_override = SubResource("MatFur")
+
+[node name="TailPuff" type="MeshInstance3D" parent="Body"]
+position = Vector3(-0.36, 0.22, 0)
+scale = Vector3(1.05, 1.05, 1.05)
+mesh = SubResource("PuffMesh")
+material_override = SubResource("MatFur")
+
+[node name="Collar" type="MeshInstance3D" parent="Body"]
+position = Vector3(0.18, 0.08, 0)
+mesh = SubResource("CollarMesh")
+material_override = SubResource("MatCollar")
+
+[node name="Eye" type="MeshInstance3D" parent="Body"]
+position = Vector3(0.50, 0.26, -0.10)
+scale = Vector3(0.28, 0.28, 0.28)
+mesh = SubResource("PuffMesh")
+material_override = SubResource("MatEye")
+
+[node name="LegA" type="MeshInstance3D" parent="Body"]
+position = Vector3(0.16, -0.25, -0.12)
+mesh = SubResource("LegMesh")
+material_override = SubResource("MatFur")
+
+[node name="LegB" type="MeshInstance3D" parent="Body"]
+position = Vector3(-0.16, -0.25, 0.12)
+mesh = SubResource("LegMesh")
+material_override = SubResource("MatFur")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.30, 0)
+shape = SubResource("SphereShape_yuki")
