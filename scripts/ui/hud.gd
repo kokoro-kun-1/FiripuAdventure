@@ -21,7 +21,12 @@ signal exit_requested
 @onready var pause_load_button: Button = $PausePanel/PauseVBox/LoadButton
 @onready var pause_exit_button: Button = $PausePanel/PauseVBox/ExitButton
 @onready var victory_panel: Panel = $VictoryPanel
-@onready var victory_label: Label = $VictoryPanel/VictoryLabel
+@onready var victory_title_label: Label = $VictoryPanel/VictoryVBox/VictoryTitleLabel
+@onready var victory_summary_label: Label = $VictoryPanel/VictoryVBox/VictorySummaryLabel
+@onready var victory_next_label: Label = $VictoryPanel/VictoryVBox/VictoryNextLabel
+@onready var victory_continue_button: Button = $VictoryPanel/VictoryVBox/VictoryButtons/ContinueButton
+@onready var victory_save_button: Button = $VictoryPanel/VictoryVBox/VictoryButtons/SaveButton
+@onready var victory_exit_button: Button = $VictoryPanel/VictoryVBox/VictoryButtons/ExitButton
 
 var game_started := false
 var pause_open := false
@@ -39,6 +44,9 @@ func _ready() -> void:
 	pause_save_button.pressed.connect(_on_pause_save_button_pressed)
 	pause_load_button.pressed.connect(_on_pause_load_button_pressed)
 	pause_exit_button.pressed.connect(_on_pause_exit_button_pressed)
+	victory_continue_button.pressed.connect(_on_victory_continue_button_pressed)
+	victory_save_button.pressed.connect(_on_victory_save_button_pressed)
+	victory_exit_button.pressed.connect(_on_victory_exit_button_pressed)
 	victory_panel.visible = false
 	pause_panel.visible = false
 	start_panel.visible = true
@@ -147,9 +155,30 @@ func _on_pause_exit_button_pressed() -> void:
 	exit_requested.emit()
 
 func show_victory() -> void:
-	var fauna_summary := "Fauna registrada: %d/%d" % [latest_count, latest_total]
-	victory_label.text = "¡Mundo 1 completado!\n\n%s\nObjeto final: %s\n%s\n\nMedalla del Bosque y Río del Biobío conseguida.\n\nGracias por probar el prototipo 0.1." % [fauna_summary, latest_object, latest_medal]
+	victory_title_label.text = "¡Mundo 1 completado!"
+	victory_summary_label.text = get_victory_summary()
+	victory_next_label.text = "Siguiente paso: en una futura versión se desbloqueará la próxima región de Chile.\nPuede seguir explorando, guardar la partida o salir del prototipo."
 	victory_panel.visible = true
+	victory_continue_button.grab_focus()
+
+func get_victory_summary() -> String:
+	var object_text := latest_object
+	if object_text.strip_edges() == "" or object_text == "Ninguno":
+		object_text = "Sin objeto equipado al cierre"
+	return "Resumen de aventura\n• Diario de Naturaleza: %d/%d especies registradas\n• Objeto final: %s\n• Estado de medalla: %s\n• Región protegida: Biobío Silvestre\n• Prototipo: 0.1" % [latest_count, latest_total, object_text, latest_medal]
+
+func _on_victory_continue_button_pressed() -> void:
+	victory_panel.visible = false
+	show_message("Puede seguir explorando el Biobío o guardar la partida con F5.")
+
+func _on_victory_save_button_pressed() -> void:
+	show_message("Guardando victoria...")
+	save_requested.emit()
+
+func _on_victory_exit_button_pressed() -> void:
+	show_message("Saliendo del prototipo...")
+	get_tree().paused = false
+	exit_requested.emit()
 
 func _on_collected_changed(count: int, total: int) -> void:
 	latest_count = count

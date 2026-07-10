@@ -11,6 +11,7 @@ TEST_SCENES=(
   "res://tests/ui_save_load_test.tscn"
   "res://tests/save_medal_world_test.tscn"
   "res://tests/pause_menu_test.tscn"
+  "res://tests/victory_summary_test.tscn"
 )
 
 printf 'Running Firipu Adventure tests with %s\n' "$GODOT_BIN"
