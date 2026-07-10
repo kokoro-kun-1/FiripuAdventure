@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/save_collectible_test.gd" id="1_collectible_test"]
+
+[node name="SaveCollectibleTest" type="Node"]
+script = ExtResource("1_collectible_test")

@@ -1,12 +1,16 @@
 extends CanvasLayer
 
 signal start_requested
+signal save_requested
+signal load_requested
 
 @onready var fauna_label: Label = $Panel/VBox/FaunaLabel
 @onready var object_label: Label = $Panel/VBox/ObjectLabel
 @onready var medal_label: Label = $Panel/VBox/MedalLabel
 @onready var state_label: Label = $Panel/VBox/StateLabel
 @onready var controls_label: Label = $Panel/VBox/ControlsLabel
+@onready var save_button: Button = $Panel/VBox/SaveLoadButtons/SaveButton
+@onready var load_button: Button = $Panel/VBox/SaveLoadButtons/LoadButton
 @onready var hint_label: Label = $BottomPanel/HintLabel
 @onready var start_panel: Panel = $StartPanel
 @onready var start_label: Label = $StartPanel/StartLabel
@@ -21,10 +25,12 @@ var latest_medal := "Medalla: Pendiente"
 
 func _ready() -> void:
 	_ensure_xbox_start_action()
+	save_button.pressed.connect(_on_save_button_pressed)
+	load_button.pressed.connect(_on_load_button_pressed)
 	victory_panel.visible = false
 	start_panel.visible = true
 	start_label.text = "Firipu Adventure\nMundo 1: Biobío Silvestre\n\nObjetivo:\nRegistre 4 especies, use un objeto contra el robot\ny recupere la Medalla del Bosque y Río.\n\nEnter / botón A para comenzar"
-	controls_label.text = "Xbox: Stick izq. mover · A saltar/aceptar · X interactuar · RB usar objeto · B esquivar · LB/RT correr | Teclado: A/D/W/S · Espacio · E · Click"
+	controls_label.text = "Xbox: Stick izq. mover · A saltar/aceptar · X interactuar · RB usar objeto · B esquivar · LB/RT correr | Teclado: A/D/W/S · Espacio · E · Click · F5 guardar · F9 cargar"
 	show_message("Presione Enter o botón A del mando Xbox para comenzar la aventura.")
 
 func _ensure_xbox_start_action() -> void:
@@ -65,6 +71,14 @@ func start_game() -> void:
 
 func show_message(text: String) -> void:
 	hint_label.text = text
+
+func _on_save_button_pressed() -> void:
+	show_message("Guardando partida...")
+	save_requested.emit()
+
+func _on_load_button_pressed() -> void:
+	show_message("Cargando partida...")
+	load_requested.emit()
 
 func show_victory() -> void:
 	var fauna_summary := "Fauna registrada: %d/%d" % [latest_count, latest_total]

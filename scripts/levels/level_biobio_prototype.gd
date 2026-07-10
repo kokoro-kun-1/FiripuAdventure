@@ -8,6 +8,7 @@ extends Node3D
 var flow_started := false
 var victory_reached := false
 var gameplay_started := false
+var world_completed := false
 # Reference to savegame singleton
 var save_game : Node
 
@@ -17,6 +18,10 @@ func _ready() -> void:
 		hud.bind_player(player)
 		if hud.has_signal("start_requested"):
 			hud.start_requested.connect(_on_start_requested)
+		if hud.has_signal("save_requested"):
+			hud.save_requested.connect(_on_save_requested)
+		if hud.has_signal("load_requested"):
+			hud.load_requested.connect(_on_load_requested)
 		if player.has_method("set_input_locked"):
 			player.set_input_locked(true)
 		medal_area.body_entered.connect(_on_medal_area_body_entered)
@@ -44,42 +49,56 @@ func _on_start_requested() -> void:
 		player.set_input_locked(false)
 	print("FLOW_GAMEPLAY_START Mundo 1 Biobío")
 
+func _on_save_requested() -> void:
+	if save_game == null:
+		push_warning("Level: SaveGame autoload not available.")
+		return
+	save_game.save_game(self)
+	if hud.has_method("show_message"):
+		hud.show_message("Partida guardada.")
+
+func _on_load_requested() -> void:
+	if save_game == null:
+		push_warning("Level: SaveGame autoload not available.")
+		return
+	save_game.load_game(self)
+	if hud.has_method("show_message"):
+		hud.show_message("Partida cargada.")
+
 func _on_medal_area_body_entered(body: Node) -> void:
 	if body == player and player.has_method("obtain_medal"):
 		player.obtain_medal()
 
 func _on_prototype_completed() -> void:
-	victory_reached = true
-	if hud.has_method("show_victory"):
-		hud.show_victory()
+	set_world_completed(true)
 	print("FLOW_VICTORY Mundo 1 Biobío")
 	
 	# Autosave when world completed
-	if save_game != null:
-		save_game.save_game(self)
-		# Optionally show a message
-		if hud.has_method("show_message"):
-			hud.show_message("Partida guardada.")
+	_on_save_requested()
+
+func set_world_completed(completed: bool) -> void:
+	world_completed = completed
+	victory_reached = completed
+	if completed and hud != null and hud.has_method("show_victory"):
+		hud.show_victory()
+
+func get_world_completed() -> bool:
+	return world_completed
 
 func get_flow_status() -> Dictionary:
 	return {
 		"started": flow_started,
 		"gameplay_started": gameplay_started,
 		"victory": victory_reached,
+		"world_completed": world_completed,
 		"collectibles": player.get("collected"),
 		"medal": player.get("medal_obtained")
 	}
 
 # Optional: handle input for quicksave/quickload (F5/F9) for testing
 func _unhandled_input(event: InputEvent) -> void:
-	if event is InputEventKey and event.pressed:
-		if event.scancode == KEY_F5:  # F5 quicksave
-			if save_game != null:
-				save_game.save_game(self)
-				if hud.has_method("show_message"):
-					hud.show_message("Partida guardada (F5).")
-		elif event.scancode == KEY_F9:  # F9 quickload
-			if save_game != null:
-				save_game.load_game(self)
-				if hud.has_method("show_message"):
-					hud.show_message("Partida cargada (F9).")
+	if event is InputEventKey and event.pressed and not event.echo:
+		if event.keycode == KEY_F5:
+			_on_save_requested()
+		elif event.keycode == KEY_F9:
+			_on_load_requested()

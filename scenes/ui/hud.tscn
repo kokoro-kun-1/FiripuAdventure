@@ -9,13 +9,13 @@ script = ExtResource("1")
 offset_left = 12.0
 offset_top = 12.0
 offset_right = 548.0
-offset_bottom = 178.0
+offset_bottom = 214.0
 
 [node name="VBox" type="VBoxContainer" parent="Panel"]
 offset_left = 10.0
 offset_top = 10.0
 offset_right = 520.0
-offset_bottom = 152.0
+offset_bottom = 190.0
 
 [node name="FaunaLabel" type="Label" parent="Panel/VBox"]
 text = "Diario de Naturaleza: 0/4"
@@ -30,8 +30,16 @@ text = "Medalla: Pendiente"
 text = "Firipu: quieto"
 
 [node name="ControlsLabel" type="Label" parent="Panel/VBox"]
-text = "Xbox: Stick izq. mover · A saltar/aceptar · X interactuar · RB usar objeto · B esquivar · LB/RT correr | Teclado: A/D/W/S · Espacio · E · Click"
+text = "Xbox: Stick izq. mover · A saltar/aceptar · X interactuar · RB usar objeto · B esquivar · LB/RT correr | Teclado: A/D/W/S · Espacio · E · Click · F5 guardar · F9 cargar"
 autowrap_mode = 3
+
+[node name="SaveLoadButtons" type="HBoxContainer" parent="Panel/VBox"]
+
+[node name="SaveButton" type="Button" parent="Panel/VBox/SaveLoadButtons"]
+text = "Guardar"
+
+[node name="LoadButton" type="Button" parent="Panel/VBox/SaveLoadButtons"]
+text = "Cargar"
 
 [node name="BottomPanel" type="Panel" parent="."]
 offset_left = 120.0
