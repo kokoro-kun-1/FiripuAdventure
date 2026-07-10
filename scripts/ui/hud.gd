@@ -59,7 +59,11 @@ func _ready() -> void:
 	start_title_label.text = "Firipu Adventure"
 	start_world_label.text = "Mundo 1 · Biobío Silvestre"
 	start_objective_label.text = "Objetivo: registre 4 especies del Diario de Naturaleza, tome una piedra o rama, enfrente al robot y recupere la Medalla del Bosque y Río."
-	start_controls_label.text = "Controles\n• A/D: avanzar y retroceder · W/S: profundidad limitada\n• Espacio / A: saltar · Shift / LB: correr · Ctrl / B: esquivar\n• E / X: interactuar · Click / RB: usar objeto\n• F5 guardar · F9 cargar · Esc / Start pausa"
+	start_controls_label.text = "Controles
+• A/D: avanzar y retroceder · W/S: profundidad limitada
+• Espacio / A: saltar · Shift / LB: correr · Ctrl / B: esquivar
+• E / X: interactuar · Click / RB: usar objeto
+• F5 guardar · F9 cargar · Esc / Start pausa"
 	start_hint_label.text = "Presione Enter, botón A o Start para comenzar"
 	controls_label.text = "Controles: A/D mover · W/S profundidad · Espacio saltar · E interactuar · Click usar objeto · F5/F9 guardar/cargar · Esc pausa"
 	show_message("Pantalla inicial lista: revise objetivo y controles, luego presione Enter o botón A.")
@@ -176,9 +180,13 @@ func _on_pause_exit_button_pressed() -> void:
 	exit_requested.emit()
 
 func show_victory() -> void:
+	# Play victory sound
+	if audio:
+		audio.play_sfx("victory", 0.8)
 	victory_title_label.text = "¡Mundo 1 completado!"
 	victory_summary_label.text = get_victory_summary()
-	victory_next_label.text = "Siguiente paso: en una futura versión se desbloqueará la próxima región de Chile.\nPuede seguir explorando, guardar la partida o salir del prototipo."
+	victory_next_label.text = "Siguiente paso: en una futura versión se desbloqueará la próxima región de Chile.
+Puede seguir explorando, guardar la partida o salir del prototipo."
 	victory_panel.visible = true
 	victory_continue_button.grab_focus()
 
@@ -186,48 +194,9 @@ func get_victory_summary() -> String:
 	var object_text := latest_object
 	if object_text.strip_edges() == "" or object_text == "Ninguno":
 		object_text = "Sin objeto equipado al cierre"
-	return "Resumen de aventura\n• Diario de Naturaleza: %d/%d especies registradas\n• Objeto final: %s\n• Estado de medalla: %s\n• Región protegida: Biobío Silvestre\n• Prototipo: 0.1" % [latest_count, latest_total, object_text, latest_medal]
-
-func _on_victory_continue_button_pressed() -> void:
-	_reset_exit_confirmations()
-	victory_panel.visible = false
-	show_message("Puede seguir explorando el Biobío o guardar la partida con F5.")
-
-func _on_victory_save_button_pressed() -> void:
-	_reset_exit_confirmations()
-	show_message("Guardando victoria...")
-	save_requested.emit()
-
-func _on_victory_exit_button_pressed() -> void:
-	if not victory_exit_pending:
-		victory_exit_pending = true
-		pause_exit_pending = false
-		victory_exit_button.text = "Confirmar salida"
-		pause_exit_button.text = "Salir del prototipo"
-		show_message("Presione Confirmar salida para cerrar el prototipo. Use Guardar victoria si desea conservar el avance.")
-		return
-	show_message("Saliendo del prototipo...")
-	get_tree().paused = false
-	exit_requested.emit()
-
-func _reset_exit_confirmations() -> void:
-	pause_exit_pending = false
-	victory_exit_pending = false
-	pause_exit_button.text = "Salir del prototipo"
-	victory_exit_button.text = "Salir"
-
-func _on_collected_changed(count: int, total: int) -> void:
-	latest_count = count
-	latest_total = total
-	fauna_label.text = "Diario de Naturaleza: %d/%d" % [count, total]
-
-func _on_object_changed(text: String) -> void:
-	latest_object = text
-	object_label.text = "Objeto: %s" % text
-
-func _on_medal_state_changed(text: String) -> void:
-	latest_medal = text
-	medal_label.text = text
-
-func _on_movement_state_changed(text: String) -> void:
-	state_label.text = "Firipu: %s" % text
+	return "Resumen de aventura
+• Diario de Naturaleza: 0/0 especies registradas
+• Objeto final: 
+• Estado de medalla: 
+• Región protegida: Biobío Silvestre
+• Prototipo: 0.1" 

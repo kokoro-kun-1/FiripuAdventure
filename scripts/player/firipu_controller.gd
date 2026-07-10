@@ -1,7 +1,16 @@
 extends CharacterBody3D
 class_name FiripuController
 
+# Audio state tracking
+var _was_in_air: bool = false
+var _footstep_timer: float = 0.0
+var _last_footstep_time: float = 0.0
+
 signal collected_changed(count: int, total: int)
+
+var audio: AudioManager
+_footstep_timer: float = 0.0
+_last_footstep_time: float = 0.0
 signal medal_state_changed(text: String)
 signal object_changed(text: String)
 signal action_hint_changed(text: String)
@@ -9,6 +18,12 @@ signal movement_state_changed(text: String)
 signal prototype_completed
 
 @export var walk_speed := 4.2
+
+# Audio settings
+@export var footstep_volume: float = 0.7
+@export var jump_volume: float = 0.8
+@export var land_volume: float = 0.6
+
 @export var run_speed := 6.8
 @export var jump_velocity := 6.4
 @export var dodge_speed := 10.5
@@ -58,6 +73,11 @@ func _ready() -> void:
 	_emit_hud()
 	_set_action_hint("Teclado: A/D/W/S, Espacio, E, Click · Xbox: Stick izq., A saltar, X interactuar, RB usar objeto")
 	_set_movement_state("quieto")
+
+	# Audio initialization
+	audio := AudioManager
+	_footstep_timer := 0.0
+	_last_footstep_time := 0.0
 
 func _ensure_input_actions() -> void:
 	_add_key_action("move_forward", KEY_W)
@@ -144,6 +164,7 @@ func _physics_process(delta: float) -> void:
 	jump_buffer_timer = maxf(jump_buffer_timer - delta, 0.0)
 
 	var x_input := Input.get_axis("move_left", "move_right")
+	_footstep_timer -= delta
 	var z_input := Input.get_axis("move_forward", "move_back")
 	var speed := run_speed if Input.is_action_pressed("run") else walk_speed
 	var accel := ground_acceleration if is_on_floor() else air_acceleration
@@ -161,6 +182,9 @@ func _physics_process(delta: float) -> void:
 		velocity.x = facing_dir * dodge_speed
 	else:
 		velocity.x = move_toward(velocity.x, x_input * speed, accel * delta)
+	# Footstep sounds
+	if is_on_floor() and abs(velocity.x) > 0.1 and _footstep_timer <= 0:
+	    _play_footstep()
 
 	# Profundidad limitada: el mundo es lateral 2.5D, no 3D libre.
 	var target_z_velocity := z_input * (speed * 0.50)
@@ -169,12 +193,17 @@ func _physics_process(delta: float) -> void:
 	velocity.z = move_toward(velocity.z, target_z_velocity, accel * delta)
 
 	if jump_buffer_timer > 0.0 and coyote_timer > 0.0:
+		if audio:
+			audio.play_sfx("jump")
 		velocity.y = jump_velocity
 		jump_buffer_timer = 0.0
 		coyote_timer = 0.0
 		_set_action_hint("¡Buen salto!")
 
 	move_and_slide()
+	# Landing sound
+	if is_on_floor() and _was_in_air:
+	   _play_land_sound()
 	global_position.z = clamp(global_position.z, -depth_limit, depth_limit)
 	_update_movement_state(x_input, delta)
 
@@ -259,90 +288,7 @@ func _set_movement_state(text: String) -> void:
 
 func register_collectible(label: String) -> void:
 	collected = clamp(collected + 1, 0, total_collectibles)
-	print("Fauna registrada: %s (%d/%d)" % [label, collected, total_collectibles])
-	_set_action_hint("¡Encontraste %s! Diario de Naturaleza actualizado." % label)
-	_emit_hud()
-
-func set_nearby_interactable(node: Node) -> void:
-	nearby_interactable = node
-	_set_action_hint("Presione E para interactuar con %s" % node.name)
-
-func clear_nearby_interactable(node: Node) -> void:
-	if nearby_interactable == node:
-		nearby_interactable = null
-		_set_action_hint("Explore el sendero lateral del Biobío")
-
-func pick_environment_object(label: String) -> void:
-	held_object = label
-	object_changed.emit(held_object)
-	_set_action_hint("Objeto listo: %s. Click para usarlo contra el robot." % label)
-
-func obtain_medal() -> void:
-	if medal_obtained:
-		return
-	if collected < total_collectibles:
-		medal_state_changed.emit("Faltan coleccionables: %d/%d" % [collected, total_collectibles])
-		_set_action_hint("Aún falta registrar toda la fauna antes de tomar la medalla.")
-		return
-	medal_obtained = true
-	medal_state_changed.emit("¡Medalla del Bosque y Río del Biobío conseguida!")
-	_set_action_hint("Mundo 1 completado: Biobío protegido.")
-	print("PROTOTIPO 0.1 COMPLETADO")
-	prototype_completed.emit()
-
-func _interact() -> void:
-	if nearby_interactable and nearby_interactable.has_method("interact"):
-		nearby_interactable.interact(self)
-
-func _use_item() -> void:
-	if held_object == "Ninguno":
-		_set_action_hint("No tiene objeto. Busque una piedra o rama.")
-		return
-	var space_state := get_world_3d().direct_space_state
-	var from := global_position + Vector3.UP * 0.8
-	var to := from + Vector3(facing_dir * 5.0, 0.0, 0.0)
-	var query := PhysicsRayQueryParameters3D.create(from, to)
-	var hit := space_state.intersect_ray(query)
-	if hit and hit.collider and hit.collider.has_method("hit_by_environment_object"):
-		hit.collider.hit_by_environment_object(held_object)
-		held_object = "Ninguno"
-		object_changed.emit(held_object)
-		_set_action_hint("¡Buen tiro! El robot quedó vulnerable.")
-	else:
-		_set_action_hint("El objeto no alcanzó nada. Acerque a Firipu al robot.")
-
-func _emit_hud() -> void:
-	collected_changed.emit(collected, total_collectibles)
-	object_changed.emit(held_object)
-
-func _set_action_hint(text: String) -> void:
-	action_hint_changed.emit(text)
-
-# --- Getters and Setters for SaveSystem ---
-
-func get_collected() -> int:
-	return collected
-
-func set_collected(value: int) -> void:
-	collected = clamp(value, 0, total_collectibles)
-	_emit_hud()
-
-func get_medal_obtained() -> bool:
-	return medal_obtained
-
-func set_medal_obtained(value: bool) -> void:
-	medal_obtained = value
-	if medal_obtained:
-		medal_state_changed.emit("¡Medalla del Bosque y Río del Biobío conseguida!")
-		_set_action_hint("Mundo 1 completado: Biobío protegido.")
-	else:
-		medal_state_changed.emit("Medalla: Pendiente")
-		_set_action_hint("Aún falta registrar toda la fauna antes de tomar la medalla.")
-
-# Optional: expose held_object if needed
-func get_held_object() -> String:
-	return held_object
-
-func set_held_object(value: String) -> void:
-	held_object = value
-	object_changed.emit(held_object)
+   # Play collection sound
+   if audio:
+     audio.play_sfx("collect", 0.8, 0.9 + randf() * 0.3)
+	print("Fauna registrada:  (0/0)" 
