@@ -31,7 +31,7 @@ text = "Medalla: Pendiente"
 text = "Firipu: quieto"
 
 [node name="ControlsLabel" type="Label" parent="Panel/VBox"]
-text = "Controles: A/D/W/S mover · Espacio saltar · E interactuar · Click usar objeto · F5 guardar · F9 cargar"
+text = "Controles: A/D/W/S mover · Espacio saltar · E interactuar · Click usar objeto · F5 guardar · F9 cargar · Esc pausa"
 autowrap_mode = 3
 
 [node name="SaveLoadTitle" type="Label" parent="Panel/VBox"]
@@ -88,6 +88,46 @@ text = "Firipu Adventure\nMundo 1: Biobío Silvestre\n\nEnter / botón A para co
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
+
+[node name="PausePanel" type="Panel" parent="."]
+visible = false
+offset_left = 410.0
+offset_top = 150.0
+offset_right = 870.0
+offset_bottom = 530.0
+
+[node name="PauseVBox" type="VBoxContainer" parent="PausePanel"]
+offset_left = 34.0
+offset_top = 28.0
+offset_right = 426.0
+offset_bottom = 352.0
+theme_override_constants/separation = 14
+alignment = 1
+
+[node name="PauseTitle" type="Label" parent="PausePanel/PauseVBox"]
+text = "Pausa"
+horizontal_alignment = 1
+
+[node name="PauseHint" type="Label" parent="PausePanel/PauseVBox"]
+text = "Puede guardar o cargar el avance antes de salir."
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="ContinueButton" type="Button" parent="PausePanel/PauseVBox"]
+custom_minimum_size = Vector2(300, 42)
+text = "Continuar"
+
+[node name="SaveButton" type="Button" parent="PausePanel/PauseVBox"]
+custom_minimum_size = Vector2(300, 42)
+text = "Guardar partida"
+
+[node name="LoadButton" type="Button" parent="PausePanel/PauseVBox"]
+custom_minimum_size = Vector2(300, 42)
+text = "Cargar partida"
+
+[node name="ExitButton" type="Button" parent="PausePanel/PauseVBox"]
+custom_minimum_size = Vector2(300, 42)
+text = "Salir del prototipo"
 
 [node name="VictoryPanel" type="Panel" parent="."]
 visible = false

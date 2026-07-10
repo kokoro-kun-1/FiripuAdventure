@@ -22,6 +22,8 @@ func _ready() -> void:
 			hud.save_requested.connect(_on_save_requested)
 		if hud.has_signal("load_requested"):
 			hud.load_requested.connect(_on_load_requested)
+		if hud.has_signal("exit_requested"):
+			hud.exit_requested.connect(_on_exit_requested)
 		if player.has_method("set_input_locked"):
 			player.set_input_locked(true)
 		medal_area.body_entered.connect(_on_medal_area_body_entered)
@@ -64,6 +66,10 @@ func _on_load_requested() -> void:
 	save_game.load_game(self)
 	if hud.has_method("show_message"):
 		hud.show_message("Partida cargada.")
+
+func _on_exit_requested() -> void:
+	print("FLOW_EXIT_REQUESTED Mundo 1 Biobío")
+	get_tree().quit(0)
 
 func _on_medal_area_body_entered(body: Node) -> void:
 	if body == player and player.has_method("obtain_medal"):

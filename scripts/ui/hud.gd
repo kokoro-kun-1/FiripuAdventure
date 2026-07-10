@@ -3,6 +3,7 @@ extends CanvasLayer
 signal start_requested
 signal save_requested
 signal load_requested
+signal exit_requested
 
 @onready var fauna_label: Label = $Panel/VBox/FaunaLabel
 @onready var object_label: Label = $Panel/VBox/ObjectLabel
@@ -14,24 +15,47 @@ signal load_requested
 @onready var hint_label: Label = $BottomPanel/HintLabel
 @onready var start_panel: Panel = $StartPanel
 @onready var start_label: Label = $StartPanel/StartLabel
+@onready var pause_panel: Panel = $PausePanel
+@onready var pause_continue_button: Button = $PausePanel/PauseVBox/ContinueButton
+@onready var pause_save_button: Button = $PausePanel/PauseVBox/SaveButton
+@onready var pause_load_button: Button = $PausePanel/PauseVBox/LoadButton
+@onready var pause_exit_button: Button = $PausePanel/PauseVBox/ExitButton
 @onready var victory_panel: Panel = $VictoryPanel
 @onready var victory_label: Label = $VictoryPanel/VictoryLabel
 
 var game_started := false
+var pause_open := false
 var latest_count := 0
 var latest_total := 4
 var latest_object := "Ninguno"
 var latest_medal := "Medalla: Pendiente"
 
 func _ready() -> void:
-	_ensure_xbox_start_action()
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	_ensure_ui_actions()
 	save_button.pressed.connect(_on_save_button_pressed)
 	load_button.pressed.connect(_on_load_button_pressed)
+	pause_continue_button.pressed.connect(close_pause_menu)
+	pause_save_button.pressed.connect(_on_pause_save_button_pressed)
+	pause_load_button.pressed.connect(_on_pause_load_button_pressed)
+	pause_exit_button.pressed.connect(_on_pause_exit_button_pressed)
 	victory_panel.visible = false
+	pause_panel.visible = false
 	start_panel.visible = true
-	start_label.text = "Firipu Adventure\nMundo 1: Biobío Silvestre\n\nObjetivo:\nRegistre 4 especies, use un objeto contra el robot\ny recupere la Medalla del Bosque y Río.\n\nEnter / botón A para comenzar\nF5 guardar · F9 cargar"
-	controls_label.text = "Controles: A/D/W/S mover · Espacio saltar · E interactuar · Click usar objeto · F5 guardar · F9 cargar"
+	start_label.text = "Firipu Adventure\nMundo 1: Biobío Silvestre\n\nObjetivo:\nRegistre 4 especies, use un objeto contra el robot\ny recupere la Medalla del Bosque y Río.\n\nEnter / botón A para comenzar\nF5 guardar · F9 cargar · Esc pausa"
+	controls_label.text = "Controles: A/D/W/S mover · Espacio saltar · E interactuar · Click usar objeto · F5 guardar · F9 cargar · Esc pausa"
 	show_message("Presione Enter o botón A del mando Xbox para comenzar la aventura.")
+
+func _ensure_ui_actions() -> void:
+	_ensure_xbox_start_action()
+	if not InputMap.has_action("pause_menu"):
+		InputMap.add_action("pause_menu")
+	var esc_event := InputEventKey.new()
+	esc_event.keycode = KEY_ESCAPE
+	InputMap.action_add_event("pause_menu", esc_event)
+	var start_event := InputEventJoypadButton.new()
+	start_event.button_index = JOY_BUTTON_START
+	InputMap.action_add_event("pause_menu", start_event)
 
 func _ensure_xbox_start_action() -> void:
 	if not InputMap.has_action("ui_accept"):
@@ -46,6 +70,9 @@ func _ensure_xbox_start_action() -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if not game_started and event.is_action_pressed("ui_accept"):
 		start_game()
+		return
+	if game_started and event.is_action_pressed("pause_menu"):
+		toggle_pause_menu()
 
 func bind_player(player: Node) -> void:
 	if player.has_signal("collected_changed"):
@@ -69,6 +96,32 @@ func start_game() -> void:
 	show_message("Avance por el sendero: registre la fauna, tome piedra/rama y enfrente al robot.")
 	start_requested.emit()
 
+func toggle_pause_menu() -> void:
+	if pause_open:
+		close_pause_menu()
+	else:
+		open_pause_menu()
+
+func open_pause_menu() -> void:
+	if pause_open:
+		return
+	pause_open = true
+	pause_panel.visible = true
+	get_tree().paused = true
+	pause_continue_button.grab_focus()
+	show_message("Pausa: puede guardar, cargar, continuar o salir.")
+
+func close_pause_menu() -> void:
+	if not pause_open:
+		return
+	pause_open = false
+	pause_panel.visible = false
+	get_tree().paused = false
+	show_message("Juego reanudado.")
+
+func is_pause_menu_open() -> bool:
+	return pause_open
+
 func show_message(text: String) -> void:
 	hint_label.text = text
 
@@ -79,6 +132,19 @@ func _on_save_button_pressed() -> void:
 func _on_load_button_pressed() -> void:
 	show_message("Cargando partida...")
 	load_requested.emit()
+
+func _on_pause_save_button_pressed() -> void:
+	show_message("Guardando desde pausa...")
+	save_requested.emit()
+
+func _on_pause_load_button_pressed() -> void:
+	show_message("Cargando desde pausa...")
+	load_requested.emit()
+
+func _on_pause_exit_button_pressed() -> void:
+	show_message("Saliendo del prototipo...")
+	get_tree().paused = false
+	exit_requested.emit()
 
 func show_victory() -> void:
 	var fauna_summary := "Fauna registrada: %d/%d" % [latest_count, latest_total]
