@@ -73,5 +73,23 @@ func _run_test() -> void:
         TestUtils.fail(self, TEST_NAME, "next-step text is not clear")
         return
 
+    var exit_requested := false
+    hud.exit_requested.connect(func() -> void:
+        exit_requested = true
+    )
+
+    exit_button.pressed.emit()
+    if exit_requested:
+        TestUtils.fail(self, TEST_NAME, "victory exit emitted without confirmation")
+        return
+    if exit_button.text != "Confirmar salida":
+        TestUtils.fail(self, TEST_NAME, "victory exit button did not switch to confirmation text")
+        return
+
+    continue_button.pressed.emit()
+    if exit_button.text != "Salir":
+        TestUtils.fail(self, TEST_NAME, "victory exit confirmation was not reset by continue")
+        return
+
     print(TEST_NAME, ": PASS")
     get_tree().quit(0)

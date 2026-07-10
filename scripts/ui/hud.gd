@@ -34,6 +34,8 @@ var latest_count := 0
 var latest_total := 4
 var latest_object := "Ninguno"
 var latest_medal := "Medalla: Pendiente"
+var pause_exit_pending := false
+var victory_exit_pending := false
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -114,6 +116,7 @@ func open_pause_menu() -> void:
 	if pause_open:
 		return
 	pause_open = true
+	_reset_exit_confirmations()
 	pause_panel.visible = true
 	get_tree().paused = true
 	pause_continue_button.grab_focus()
@@ -123,6 +126,7 @@ func close_pause_menu() -> void:
 	if not pause_open:
 		return
 	pause_open = false
+	_reset_exit_confirmations()
 	pause_panel.visible = false
 	get_tree().paused = false
 	show_message("Juego reanudado.")
@@ -142,14 +146,23 @@ func _on_load_button_pressed() -> void:
 	load_requested.emit()
 
 func _on_pause_save_button_pressed() -> void:
+	_reset_exit_confirmations()
 	show_message("Guardando desde pausa...")
 	save_requested.emit()
 
 func _on_pause_load_button_pressed() -> void:
+	_reset_exit_confirmations()
 	show_message("Cargando desde pausa...")
 	load_requested.emit()
 
 func _on_pause_exit_button_pressed() -> void:
+	if not pause_exit_pending:
+		pause_exit_pending = true
+		victory_exit_pending = false
+		pause_exit_button.text = "Confirmar salida"
+		victory_exit_button.text = "Salir"
+		show_message("Presione Confirmar salida para cerrar el prototipo sin guardar cambios nuevos.")
+		return
 	show_message("Saliendo del prototipo...")
 	get_tree().paused = false
 	exit_requested.emit()
@@ -168,17 +181,32 @@ func get_victory_summary() -> String:
 	return "Resumen de aventura\n• Diario de Naturaleza: %d/%d especies registradas\n• Objeto final: %s\n• Estado de medalla: %s\n• Región protegida: Biobío Silvestre\n• Prototipo: 0.1" % [latest_count, latest_total, object_text, latest_medal]
 
 func _on_victory_continue_button_pressed() -> void:
+	_reset_exit_confirmations()
 	victory_panel.visible = false
 	show_message("Puede seguir explorando el Biobío o guardar la partida con F5.")
 
 func _on_victory_save_button_pressed() -> void:
+	_reset_exit_confirmations()
 	show_message("Guardando victoria...")
 	save_requested.emit()
 
 func _on_victory_exit_button_pressed() -> void:
+	if not victory_exit_pending:
+		victory_exit_pending = true
+		pause_exit_pending = false
+		victory_exit_button.text = "Confirmar salida"
+		pause_exit_button.text = "Salir del prototipo"
+		show_message("Presione Confirmar salida para cerrar el prototipo. Use Guardar victoria si desea conservar el avance.")
+		return
 	show_message("Saliendo del prototipo...")
 	get_tree().paused = false
 	exit_requested.emit()
+
+func _reset_exit_confirmations() -> void:
+	pause_exit_pending = false
+	victory_exit_pending = false
+	pause_exit_button.text = "Salir del prototipo"
+	victory_exit_button.text = "Salir"
 
 func _on_collected_changed(count: int, total: int) -> void:
 	latest_count = count

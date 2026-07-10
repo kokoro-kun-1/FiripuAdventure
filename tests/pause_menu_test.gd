@@ -72,5 +72,27 @@ func _run_test() -> void:
         get_tree().paused = false
         return
 
+    var exit_requested := false
+    hud.exit_requested.connect(func() -> void:
+        exit_requested = true
+    )
+
+    hud.call("open_pause_menu")
+    exit_button.pressed.emit()
+    if exit_requested:
+        TestUtils.fail(self, TEST_NAME, "pause exit emitted without confirmation")
+        get_tree().paused = false
+        return
+    if exit_button.text != "Confirmar salida":
+        TestUtils.fail(self, TEST_NAME, "pause exit button did not switch to confirmation text")
+        get_tree().paused = false
+        return
+
+    continue_button.pressed.emit()
+    if exit_button.text != "Salir del prototipo":
+        TestUtils.fail(self, TEST_NAME, "pause exit confirmation was not reset by continue")
+        get_tree().paused = false
+        return
+
     print(TEST_NAME, ": PASS")
     get_tree().quit(0)
