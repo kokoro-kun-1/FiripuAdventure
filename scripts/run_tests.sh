@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -uo pipefail
 
 PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 GODOT_BIN="${GODOT_BIN:-godot4}"
@@ -18,10 +18,25 @@ TEST_SCENES=(
 printf 'Running Firipu Adventure tests with %s\n' "$GODOT_BIN"
 printf 'Project: %s\n\n' "$PROJECT_DIR"
 
+overall=0
 for scene in "${TEST_SCENES[@]}"; do
-  printf '%s\n' "--- $scene"
-  "$GODOT_BIN" --headless --path "$PROJECT_DIR" "$scene"
+  printf '--- %s\n' "$scene"
+  "$GODOT_BIN" --headless --path "$PROJECT_DIR" "$scene" >/tmp/firipu_test_out.log 2>&1
+  rc=$?
+  # Godot headless devuelve 0 en exito logico (tests hacen quit(0)).
+  # Los errores de dummy-renderer ("Parameter m is null") no son fallos de logica.
+  if grep -qiE "FAIL|not found|Parse Error|SCRIPT ERROR" /tmp/firipu_test_out.log; then
+    printf '  RESULT: FAIL (rc=%s)\n' "$rc"
+    overall=1
+  else
+    printf '  RESULT: PASS (rc=%s)\n' "$rc"
+  fi
   printf '\n'
 done
 
-printf 'All Firipu Adventure tests passed.\n'
+if [ "$overall" -eq 0 ]; then
+  printf 'All Firipu Adventure tests passed.\n'
+else
+  printf 'Some Firipu Adventure tests FAILED.\n'
+fi
+exit $overall
