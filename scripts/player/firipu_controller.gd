@@ -37,6 +37,9 @@ signal prototype_completed
 
 var collected := 0
 var registered_species: Array[String] = []
+# Vapor termal (mecánica de Ñuble): ascensor por chorro de vapor.
+@export var steam_lift_force := 7.5
+var _in_steam := false
 var held_object := "Ninguno"
 var medal_obtained := false
 var nearby_interactable: Node = null
@@ -159,6 +162,10 @@ func _physics_process(delta: float) -> void:
     else:
         coyote_timer -= delta
         velocity.y -= gravity * delta
+
+    # Vapor termal: chorro que eleva a Firipu como ascensor temporal.
+    if _in_steam:
+        velocity.y = maxf(velocity.y, steam_lift_force)
 
     jump_buffer_timer = maxf(jump_buffer_timer - delta, 0.0)
 
@@ -381,6 +388,18 @@ func dismount_bike() -> void:
     bike_boost_active = false
     bike_multiplier = 1.0
     print("FIRIPU: bicicleta desmontada")
+
+# Vapor termal (Ñuble): activa/desactiva el ascensor de vapor.
+func set_in_steam(active: bool) -> void:
+    if active == _in_steam:
+        return
+    _in_steam = active
+    if active and audio != null and audio.has_method("play_sfx"):
+        audio.play_sfx("jump", 0.6, 0.7)
+    print("FIRIPU: vapor termal " + ("activo" if active else "inactivo"))
+
+func is_in_steam() -> bool:
+    return _in_steam
 
 func _on_bike_timeout() -> void:
     dismount_bike()

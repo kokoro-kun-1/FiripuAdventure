@@ -23,6 +23,7 @@ TEST_SCENES=(
   "res://tests/boss_test.tscn"
   "res://tests/diary_test.tscn"
   "res://tests/audio_test.tscn"
+  "res://tests/nuble_test.tscn"
 )
 
 printf 'Running Firipu Adventure tests with %s\n' "$GODOT_BIN"
