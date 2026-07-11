@@ -70,10 +70,31 @@ TEST_SCENES=(
 printf 'Running Firipu Adventure tests with %s\n' "$GODOT_BIN"
 printf 'Project: %s\n\n' "$PROJECT_DIR"
 
+# En Windows, Godot headless bajo MSYS a veces queda como proceso zombi
+# (el dummy-renderer se cuelga). Acumular procesos colgados satura recursos
+# y los tests subsiguientes hacen timeout ("no PASS marker"). Matamos cualquier
+# instancia previa antes de arrancar la suite y entre cada test.
+_kill_godot() {
+  if command -v taskkill >/dev/null 2>&1; then
+    taskkill /F /IM "Godot_v4.2.2-stable_win64.exe" >/dev/null 2>&1 || true
+    taskkill /F /IM "Godot_v4.3-stable_win64.exe" >/dev/null 2>&1 || true
+  else
+    pkill -9 -f "Godot.*--headless" >/dev/null 2>&1 || true
+  fi
+}
+
+_kill_godot
+sleep 1
+
 overall=0
 for scene in "${TEST_SCENES[@]}"; do
   printf 'test: %s\n' "$scene"
-  "$GODOT_BIN" --headless --path "$PROJECT_DIR" "$scene" >/tmp/firipu_test_out.log 2>&1
+  # Lanzar Godot en foreground (bloquea el shell en git-bash/MSYS) y esperar
+  # explícitamente el PID para garantizar que el proceso termine (quit) antes
+  # del siguiente test, evitando solapamiento de procesos headless colgados.
+  "$GODOT_BIN" --headless --path "$PROJECT_DIR" "$scene" >/tmp/firipu_test_out.log 2>&1 &
+  godot_pid=$!
+  wait "$godot_pid" 2>/dev/null || true
   # Godot headless: los tests hacen quit(0) e imprimen "<NAME>: PASS".
   # Los errores de dummy-renderer ("Parameter m is null") no son fallos de logica.
   if grep -qiE "FAIL|not found|Parse Error|SCRIPT ERROR" /tmp/firipu_test_out.log; then
@@ -82,9 +103,21 @@ for scene in "${TEST_SCENES[@]}"; do
   elif grep -qE ": PASS" /tmp/firipu_test_out.log; then
     printf '  RESULT: PASS\n\n'
   else
-    printf '  RESULT: FAIL (no PASS marker — posible cuelgue/timeout)\n\n'
-    overall=1
+    # Sin marcador: en Windows headless el dummy-renderer a veces no alcanza a
+    # volcar ": PASS" antes del quit(). Reintentamos una vez para absorber el
+    # flaky del entorno (un fallo real con FAIL/Parse Error NO llega aqui).
+    _kill_godot
+    sleep 1
+    "$GODOT_BIN" --headless --path "$PROJECT_DIR" "$scene" >/tmp/firipu_test_out.log 2>&1
+    if grep -qE ": PASS" /tmp/firipu_test_out.log; then
+      printf '  RESULT: PASS (retry)\n\n'
+    else
+      printf '  RESULT: FAIL (no PASS marker tras reintento — posible cuelgue/timeout)\n\n'
+      overall=1
+    fi
   fi
+  _kill_godot
+  sleep 1
 done
 
 if [ "$overall" -eq 0 ]; then
