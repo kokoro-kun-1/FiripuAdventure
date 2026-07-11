@@ -516,3 +516,196 @@ func _emit_hud() -> void:
     object_changed.emit(held_object)
     medal_state_changed.emit("Medalla: Pendiente" if not medal_obtained else "Medalla: Obtenida")
     movement_state_changed.emit(movement_state)
+
+# Tronco flotante (Maule): balsa temporal río abajo.
+var raft_log_active := false
+var raft_log_timer: Timer
+
+func activate_raft_log(duration: float = 12.0) -> void:
+    raft_log_active = true
+    if raft_log_timer == null:
+        raft_log_timer = Timer.new()
+        raft_log_timer.one_shot = true
+        add_child(raft_log_timer)
+        raft_log_timer.timeout.connect(_on_raft_log_timeout)
+    raft_log_timer.wait_time = duration
+    raft_log_timer.start()
+    if audio != null and audio.has_method("play_sfx"):
+        audio.play_sfx("collect", 1.0, 0.8)
+    print("FIRIPU: tronco flotante activado por " + str(duration) + "s")
+
+func _on_raft_log_timeout() -> void:
+    raft_log_active = false
+    print("FIRIPU: tronco flotante finalizado")
+
+# Eco tricahue (O'Higgins): revela rutas ocultas.
+var echo_reveal_active := false
+var echo_reveal_timer: Timer
+
+func activate_echo_reveal(duration: float = 10.0) -> void:
+    echo_reveal_active = true
+    if echo_reveal_timer == null:
+        echo_reveal_timer = Timer.new()
+        echo_reveal_timer.one_shot = true
+        add_child(echo_reveal_timer)
+        echo_reveal_timer.timeout.connect(_on_echo_reveal_timeout)
+    echo_reveal_timer.wait_time = duration
+    echo_reveal_timer.start()
+    if audio != null and audio.has_method("play_sfx"):
+        audio.play_sfx("collect", 1.0, 1.1)
+    print("FIRIPU: eco tricahue activado por " + str(duration) + "s")
+
+func _on_echo_reveal_timeout() -> void:
+    echo_reveal_active = false
+    print("FIRIPU: eco tricahue finalizado")
+
+# Impulso cerro (Metropolitana): descensos controlados.
+var hill_boost_active := false
+var hill_boost_timer: Timer
+
+func activate_hill_boost(duration: float = 8.0) -> void:
+    hill_boost_active = true
+    if hill_boost_timer == null:
+        hill_boost_timer = Timer.new()
+        hill_boost_timer.one_shot = true
+        add_child(hill_boost_timer)
+        hill_boost_timer.timeout.connect(_on_hill_boost_timeout)
+    hill_boost_timer.wait_time = duration
+    hill_boost_timer.start()
+    if audio != null and audio.has_method("play_sfx"):
+        audio.play_sfx("jump", 0.6, 0.7)
+    print("FIRIPU: impulso cerro activado por " + str(duration) + "s")
+
+func _on_hill_boost_timeout() -> void:
+    hill_boost_active = false
+    print("FIRIPU: impulso cerro finalizado")
+
+# Cometa costera (Valparaíso): planeo con viento costero.
+var kite_glide_active := false
+var kite_glide_timer: Timer
+
+func activate_kite_glide(duration: float = 12.0) -> void:
+    kite_glide_active = true
+    if kite_glide_timer == null:
+        kite_glide_timer = Timer.new()
+        kite_glide_timer.one_shot = true
+        add_child(kite_glide_timer)
+        kite_glide_timer.timeout.connect(_on_kite_glide_timeout)
+    kite_glide_timer.wait_time = duration
+    kite_glide_timer.start()
+    if audio != null and audio.has_method("play_sfx"):
+        audio.play_sfx("collect", 1.0, 0.9)
+    print("FIRIPU: cometa costera activada por " + str(duration) + "s")
+
+func _on_kite_glide_timeout() -> void:
+    kite_glide_active = false
+    print("FIRIPU: cometa costera finalizada")
+
+# Túnel degú (Coquimbo): atajos subterráneos.
+var degu_tunnel_active := false
+var degu_tunnel_timer: Timer
+
+func activate_degu_tunnel(duration: float = 10.0) -> void:
+    degu_tunnel_active = true
+    if degu_tunnel_timer == null:
+        degu_tunnel_timer = Timer.new()
+        degu_tunnel_timer.one_shot = true
+        add_child(degu_tunnel_timer)
+        degu_tunnel_timer.timeout.connect(_on_degu_tunnel_timeout)
+    degu_tunnel_timer.wait_time = duration
+    degu_tunnel_timer.start()
+    if audio != null and audio.has_method("play_sfx"):
+        audio.play_sfx("collect", 1.0, 1.2)
+    print("FIRIPU: túnel degú activado por " + str(duration) + "s")
+
+func _on_degu_tunnel_timeout() -> void:
+    degu_tunnel_active = false
+    print("FIRIPU: túnel degú finalizado")
+
+# Floración temporal (Atacama): plataformas que aparecen.
+var bloom_active := false
+var bloom_timer: Timer
+
+func activate_bloom_platforms(duration: float = 15.0) -> void:
+    bloom_active = true
+    if bloom_timer == null:
+        bloom_timer = Timer.new()
+        bloom_timer.one_shot = true
+        add_child(bloom_timer)
+        bloom_timer.timeout.connect(_on_bloom_timeout)
+    bloom_timer.wait_time = duration
+    bloom_timer.start()
+    if audio != null and audio.has_method("play_sfx"):
+        audio.play_sfx("collect", 1.0, 1.1)
+    print("FIRIPU: floración temporal activada por " + str(duration) + "s")
+
+func _on_bloom_timeout() -> void:
+    bloom_active = false
+    print("FIRIPU: floración temporal finalizada")
+
+# Camanchaca reveladora (Antofagasta): niebla revela plataformas.
+var camanchaca_active := false
+var camanchaca_timer: Timer
+
+func activate_camanchaca(duration: float = 12.0) -> void:
+    camanchaca_active = true
+    if camanchaca_timer == null:
+        camanchaca_timer = Timer.new()
+        camanchaca_timer.one_shot = true
+        add_child(camanchaca_timer)
+        camanchaca_timer.timeout.connect(_on_camanchaca_timeout)
+    camanchaca_timer.wait_time = duration
+    camanchaca_timer.start()
+    if audio != null and audio.has_method("play_sfx"):
+        audio.play_sfx("collect", 1.0, 0.8)
+    print("FIRIPU: camanchaca reveladora activada por " + str(duration) + "s")
+
+func _on_camanchaca_timeout() -> void:
+    camanchaca_active = false
+    print("FIRIPU: camanchaca reveladora finalizada")
+
+# Cristal anti-espejismo (Tarapacá): distingue real/ilusión.
+var crystal_active := false
+var crystal_timer: Timer
+
+func activate_crystal(duration: float = 10.0) -> void:
+    crystal_active = true
+    if crystal_timer == null:
+        crystal_timer = Timer.new()
+        crystal_timer.one_shot = true
+        add_child(crystal_timer)
+        crystal_timer.timeout.connect(_on_crystal_timeout)
+    crystal_timer.wait_time = duration
+    crystal_timer.start()
+    if audio != null and audio.has_method("play_sfx"):
+        audio.play_sfx("collect", 1.0, 1.3)
+    print("FIRIPU: cristal anti-espejismo activado por " + str(duration) + "s")
+
+func _on_crystal_timeout() -> void:
+    crystal_active = false
+    print("FIRIPU: cristal anti-espejismo finalizado")
+
+# Alias corto usado por el test de Atacama (delega a la floración temporal).
+func activate_bloom(duration: float = 15.0) -> void:
+    activate_bloom_platforms(duration)
+
+# Salto viento altiplánico (Arica): saltos largos con viento.
+var altiplano_wind_active := false
+var altiplano_wind_timer: Timer
+
+func activate_altiplano_wind(duration: float = 12.0) -> void:
+    altiplano_wind_active = true
+    if altiplano_wind_timer == null:
+        altiplano_wind_timer = Timer.new()
+        altiplano_wind_timer.one_shot = true
+        add_child(altiplano_wind_timer)
+        altiplano_wind_timer.timeout.connect(_on_altiplano_wind_timeout)
+    altiplano_wind_timer.wait_time = duration
+    altiplano_wind_timer.start()
+    if audio != null and audio.has_method("play_sfx"):
+        audio.play_sfx("jump", 0.8, 0.7)
+    print("FIRIPU: salto viento altiplánico activado por " + str(duration) + "s")
+
+func _on_altiplano_wind_timeout() -> void:
+    altiplano_wind_active = false
+    print("FIRIPU: salto viento altiplánico finalizado")

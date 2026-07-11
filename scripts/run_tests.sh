@@ -56,6 +56,15 @@ TEST_SCENES=(
   "res://tests/los_lagos_test.tscn"
   "res://tests/aysen_test.tscn"
   "res://tests/magallanes_test.tscn"
+  "res://tests/maule_test.tscn"
+  "res://tests/ohiggins_test.tscn"
+  "res://tests/metropolitana_test.tscn"
+  "res://tests/valparaiso_test.tscn"
+  "res://tests/coquimbo_test.tscn"
+  "res://tests/atacama_test.tscn"
+  "res://tests/antofagasta_test.tscn"
+  "res://tests/tarapaca_test.tscn"
+  "res://tests/arica_test.tscn"
 )
 
 printf 'Running Firipu Adventure tests with %s\n' "$GODOT_BIN"

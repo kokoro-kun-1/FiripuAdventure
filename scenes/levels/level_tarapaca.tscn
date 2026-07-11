@@ -1,0 +1,197 @@
+[gd_scene load_steps=30 format=3]
+
+[ext_resource type="Script" path="res://scripts/levels/level_tarapaca.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/player/firipu.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/companions/yuki.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://scenes/companions/kira.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://scenes/collectibles/collectible_base.tscn" id="5"]
+[ext_resource type="PackedScene" path="res://scenes/items/piedra.tscn" id="7"]
+[ext_resource type="PackedScene" path="res://scenes/items/rama.tscn" id="8"]
+[ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="9"]
+[ext_resource type="Script" path="res://scripts/camera/side_camera_follow.gd" id="10"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/boss_cosmic_beetle.tscn" id="12"]
+[ext_resource type="PackedScene" path="res://scenes/items/cristal_antiespejismo.tscn" id="13"]
+
+[sub_resource type="StandardMaterial3D" id="MatDesertFloor"]
+albedo_color = Color(0.85, 0.72, 0.55, 1)
+
+[sub_resource type="StandardMaterial3D" id="MatCrystal"]
+albedo_color = Color(0.60, 0.80, 0.95, 1)
+emission_enabled = true
+emission = Color(0.40, 0.70, 0.95, 1)
+emission_energy_multiplier = 1.2
+
+[sub_resource type="StandardMaterial3D" id="MatPlatform"]
+albedo_color = Color(0.62, 0.50, 0.42, 1)
+
+[sub_resource type="StandardMaterial3D" id="MatSky"]
+albedo_color = Color(0.95, 0.80, 0.55, 1)
+
+[sub_resource type="StandardMaterial3D" id="MatMedal"]
+albedo_color = Color(0.85, 0.70, 0.95, 1)
+
+[sub_resource type="StandardMaterial3D" id="MatRockDesert"]
+albedo_color = Color(0.75, 0.62, 0.50, 1)
+
+[sub_resource type="BoxMesh" id="GroundMesh"]
+size = Vector3(70, 0.4, 5)
+
+[sub_resource type="BoxShape3D" id="GroundShape"]
+size = Vector3(70, 0.4, 5)
+
+[sub_resource type="BoxMesh" id="PlatformMesh"]
+size = Vector3(4, 0.35, 2.8)
+
+[sub_resource type="BoxShape3D" id="PlatformShape"]
+size = Vector3(4, 0.35, 2.8)
+
+[sub_resource type="BoxMesh" id="SkyPanelMesh"]
+size = Vector3(80, 25, 0.2)
+
+[sub_resource type="BoxMesh" id="MedalMesh"]
+size = Vector3(0.9, 0.9, 0.16)
+
+[sub_resource type="SphereShape3D" id="MedalAreaShape"]
+radius = 1.3
+
+[sub_resource type="BoxMesh" id="RockMesh"]
+size = Vector3(3, 2, 3)
+
+[node name="LevelTarapaca" type="Node3D"]
+script = ExtResource("1")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+rotation = Vector3(-0.7, 0.15, 0)
+light_energy = 1.5
+
+[node name="SideCamera" type="Camera3D" parent="."]
+position = Vector3(-22, 8, 24)
+script = ExtResource("10")
+target_path = NodePath("../Firipu")
+
+[node name="SkyPanel" type="MeshInstance3D" parent="."]
+position = Vector3(0, 8, -10)
+mesh = SubResource("SkyPanelMesh")
+material_override = SubResource("MatSky")
+
+[node name="Ground" type="StaticBody3D" parent="."]
+position = Vector3(0, 0, 0)
+
+[node name="GroundMesh" type="MeshInstance3D" parent="Ground"]
+mesh = SubResource("GroundMesh")
+material_override = SubResource("MatDesertFloor")
+
+[node name="GroundCollision" type="CollisionShape3D" parent="Ground"]
+shape = SubResource("GroundShape")
+
+[node name="HighPlatform1" type="StaticBody3D" parent="."]
+position = Vector3(-14, 3.5, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="HighPlatform1"]
+mesh = SubResource("PlatformMesh")
+material_override = SubResource("MatPlatform")
+
+[node name="Collision" type="CollisionShape3D" parent="HighPlatform1"]
+shape = SubResource("PlatformShape")
+
+[node name="HighPlatform2" type="StaticBody3D" parent="."]
+position = Vector3(2, 6.0, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="HighPlatform2"]
+mesh = SubResource("PlatformMesh")
+material_override = SubResource("MatPlatform")
+
+[node name="Collision" type="CollisionShape3D" parent="HighPlatform2"]
+shape = SubResource("PlatformShape")
+
+[node name="HighPlatform3" type="StaticBody3D" parent="."]
+position = Vector3(18, 8.5, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="HighPlatform3"]
+mesh = SubResource("PlatformMesh")
+material_override = SubResource("MatPlatform")
+
+[node name="Collision" type="CollisionShape3D" parent="HighPlatform3"]
+shape = SubResource("PlatformShape")
+
+[node name="Firipu" parent="." instance=ExtResource("2")]
+position = Vector3(-26, 1, 0)
+
+[node name="Yuki" parent="." instance=ExtResource("3")]
+position = Vector3(-27.6, 0.55, -0.8)
+target_path = NodePath("../Firipu")
+
+[node name="Kira" parent="." instance=ExtResource("4")]
+position = Vector3(-28.4, 0.55, 0.8)
+target_path = NodePath("../Firipu")
+
+[node name="CristalAntiespejismoA" parent="." instance=ExtResource("13")]
+position = Vector3(-18, 2.5, 0)
+
+[node name="CristalAntiespejismoB" parent="." instance=ExtResource("13")]
+position = Vector3(4, 5.5, 0)
+
+[node name="CristalAntiespejismoC" parent="." instance=ExtResource("13")]
+position = Vector3(22, 8.0, 0)
+
+[node name="LagartijaNortina" parent="." instance=ExtResource("5")]
+position = Vector3(-22, 0.85, 0)
+label = "Lagartija nortina"
+diary_text = "Endémica de quebradas del norte; tolera sequía extrema."
+
+[node name="EscarabajoDesierto" parent="." instance=ExtResource("5")]
+position = Vector3(-4, 4.2, 0.3)
+label = "Escarabajo del desierto"
+diary_text = "Recicla materia orgánica bajo la arena; activo al amanecer."
+
+[node name="AranitaArida" parent="." instance=ExtResource("5")]
+position = Vector3(14, 6.2, -0.4)
+label = "Arañita árida"
+diary_text = "Teje telarañas entre rocas para capturar insectos escasos."
+
+[node name="MariposaOasis" parent="." instance=ExtResource("5")]
+position = Vector3(18, 0.9, 0.4)
+label = "Mariposa de oasis"
+diary_text = "Solo aparece junto a bofedales y oasis del norte."
+
+[node name="Piedra" parent="." instance=ExtResource("7")]
+position = Vector3(-4, 0.45, 1.25)
+
+[node name="Rama" parent="." instance=ExtResource("8")]
+position = Vector3(16, 0.45, 0.8)
+
+[node name="LagartoRobot" parent="." instance=ExtResource("12")]
+position = Vector3(28, 0.6, 0)
+
+[node name="MedalArea" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 2
+position = Vector3(32, 1.15, 0)
+
+[node name="MedalVisual" type="MeshInstance3D" parent="MedalArea"]
+rotation = Vector3(0, 0, 0.785398)
+mesh = SubResource("MedalMesh")
+material_override = SubResource("MatMedal")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MedalArea"]
+shape = SubResource("MedalAreaShape")
+
+[node name="DesertRockA" type="MeshInstance3D" parent="."]
+position = Vector3(-10, 1.0, -1.5)
+scale = Vector3(1.5, 1.2, 1.3)
+mesh = SubResource("RockMesh")
+material_override = SubResource("MatRockDesert")
+
+[node name="DesertRockB" type="MeshInstance3D" parent="."]
+position = Vector3(8, 1.0, 2.0)
+scale = Vector3(1.2, 1.0, 1.1)
+mesh = SubResource("RockMesh")
+material_override = SubResource("MatRockDesert")
+
+[node name="DesertRockC" type="MeshInstance3D" parent="."]
+position = Vector3(26, 1.0, -1.2)
+scale = Vector3(1.3, 1.1, 1.2)
+mesh = SubResource("RockMesh")
+material_override = SubResource("MatRockDesert")
+
+[node name="HUD" parent="." instance=ExtResource("9")]
