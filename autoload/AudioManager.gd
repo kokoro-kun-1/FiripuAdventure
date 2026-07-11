@@ -1,4 +1,5 @@
 extends Node
+class_name AudioManager
 
 # Audio Manager for Firipu Adventure
 # Handles all sound effects and music for the game
@@ -21,119 +22,95 @@ var ui_volume: float = 0.6
 
 # Sound effect cooldowns to prevent spam
 var last_footstep_time: float = 0.0
-var footstep_cooldown: float = 0.3  # seconds between footsteps
+var footstep_cooldown: float = 0.3
 
 func _ready() -> void:
-    # Setup audio buses if they don't exist
     _setup_audio_buses()
-    # Apply initial volume settings
     _apply_volume_settings()
     print("AudioManager initialized")
 
 func _setup_audio_buses() -> void:
-    # Create custom audio buses for better sound mixing
     var audio_server := AudioServer
-    
-    # Check if buses already exist
-    if not audio_server.has_bus(MASTER_BUS):
-        audio_server.add_bus(MASTER_BUS)
-    if not audio_server.has_bus(SFX_BUS):
-        audio_server.add_bus(SFX_BUS)
-        audio_server.set_bus_volume_db(SFX_BUS, linear_to_db(sfx_volume))
-    if not audio_server.has_bus(MUSIC_BUS):
-        audio_server.add_bus(MUSIC_BUS)
-        audio_server.set_bus_volume_db(MUSIC_BUS, linear_to_db(music_volume))
-    if not audio_server.has_bus(UI_BUS):
-        audio_server.add_bus(UI_BUS)
-        audio_server.set_bus_volume_db(UI_BUS, linear_to_db(ui_volume))
-    
-    # Set master bus volume
-    audio_server.set_bus_volume_db(MASTER_BUS))
 
-# Apply volume settings
+    if audio_server.get_bus_index(MASTER_BUS) == -1:
+        audio_server.add_bus(audio_server.bus_count)
+        audio_server.set_bus_name(audio_server.bus_count - 1, MASTER_BUS)
+    if audio_server.get_bus_index(SFX_BUS) == -1:
+        audio_server.add_bus(audio_server.bus_count)
+        audio_server.set_bus_name(audio_server.bus_count - 1, SFX_BUS)
+        audio_server.set_bus_volume_db(audio_server.get_bus_index(SFX_BUS), linear_to_db(sfx_volume))
+    if audio_server.get_bus_index(MUSIC_BUS) == -1:
+        audio_server.add_bus(audio_server.bus_count)
+        audio_server.set_bus_name(audio_server.bus_count - 1, MUSIC_BUS)
+        audio_server.set_bus_volume_db(audio_server.get_bus_index(MUSIC_BUS), linear_to_db(music_volume))
+    if audio_server.get_bus_index(UI_BUS) == -1:
+        audio_server.add_bus(audio_server.bus_count)
+        audio_server.set_bus_name(audio_server.bus_count - 1, UI_BUS)
+        audio_server.set_bus_volume_db(audio_server.get_bus_index(UI_BUS), linear_to_db(ui_volume))
+
+    audio_server.set_bus_volume_db(audio_server.get_bus_index(MASTER_BUS), linear_to_db(master_volume))
+
 func _apply_volume_settings() -> void:
     var audio_server := AudioServer
-    audio_server.set_bus_volume_db(MASTER_BUS, linear_to_db(master_volume))
-    audio_server.set_bus_volume_db(SFX_BUS, linear_to_db(sfx_volume))
-    audio_server.set_bus_volume_db(MUSIC_BUS, linear_to_db(music_volume))
-    audio_server.set_bus_volume_db(UI_BUS, linear_to_db(ui_volume))
+    audio_server.set_bus_volume_db(audio_server.get_bus_index(MASTER_BUS), linear_to_db(master_volume))
+    audio_server.set_bus_volume_db(audio_server.get_bus_index(SFX_BUS), linear_to_db(sfx_volume))
+    audio_server.set_bus_volume_db(audio_server.get_bus_index(MUSIC_BUS), linear_to_db(music_volume))
+    audio_server.set_bus_volume_db(audio_server.get_bus_index(UI_BUS), linear_to_db(ui_volume))
 
 # --- Sound Effect Methods ---
 
-func play_footstep(is_running: boolean = false) -> void:
-    """Play footstep sound with variation based on movement speed"""
+func play_footstep(is_running: bool = false) -> void:
     var time := Time.get_ticks_msec() / 1000.0
     if time - last_footstep_time < footstep_cooldown:
         return
-    
     last_footstep_time = time
-    
-    # In a real implementation, we'd play different sounds for different surfaces
-    # and variations to avoid repetition
-    # For now, we'll emit a signal or use a simple beep as placeholder
-    _play_sfx_placeholder("footstep", pitch=0.8 if is_running else 0.6)
+    var footstep_pitch: float = 0.6
+    if is_running:
+        footstep_pitch = 0.8
+    _play_sfx_placeholder("footstep", footstep_pitch, SFX_BUS)
 
 func play_jump() -> void:
-    """Play jump sound"""
-    _play_sfx_placeholder("jump", pitch=0.9)
+    _play_sfx_placeholder("jump", 0.9, SFX_BUS)
 
 func play_land() -> void:
-    """Play landing sound"""
-    _play_sfx_placeholder("land", pitch=0.7)
+    _play_sfx_placeholder("land", 0.7, SFX_BUS)
 
 func play_collect() -> void:
-    """Play sound when collecting an item (fauna, object, medal)"""
-    _play_sfx_placeholder("collect", pitch=1.2)
+    _play_sfx_placeholder("collect", 1.2, SFX_BUS)
 
 func collect_with_variation() -> void:
-    """Play collect sound with slight pitch variation for more natural feel"""
-    var pitch := 1.0 + randf() * 0.2  # 1.0 to 1.2
-    _play_sfx_placeholder("collect", pitch=pitch)
+    var pitch := 1.0 + randf() * 0.2
+    _play_sfx_placeholder("collect", pitch, SFX_BUS)
 
 func play_object_pickup() -> void:
-    """Play sound when picking up an object (stick/stone)"""
-    _play_sfx_placeholder("object_pickup", pitch=1.1)
+    _play_sfx_placeholder("object_pickup", 1.1, SFX_BUS)
 
 func play_object_throw() -> void:
-    """Play sound when throwing/using an object"""
-    _play_sfx_placeholder("object_throw", pitch=1.0)
+    _play_sfx_placeholder("object_throw", 1.0, SFX_BUS)
 
 func play_button_click() -> void:
-    """Play UI button click sound"""
-    _play_sfx_placeholder("ui_click", bus=UI_BUS, pitch=1.0)
+    _play_sfx_placeholder("ui_click", 1.0, UI_BUS)
 
 func play_menu_open() -> void:
-    """Play sound when opening a menu (pause, inventory, etc.)"""
-    _play_sfx_placeholder("menu_open", bus=UI_BUS, pitch=0.9)
+    _play_sfx_placeholder("menu_open", 0.9, UI_BUS)
 
 func play_menu_close() -> void:
-    """Play sound when closing a menu"""
-    _play_sfx_placeholder("menu_close", bus=UI_BUS, pitch=0.8)
+    _play_sfx_placeholder("menu_close", 0.8, UI_BUS)
 
 func play_victory() -> void:
-    """Play victory jingle or sound"""
-    _play_sfx_placeholder("victory", bus=MUSIC_BUS, pitch=1.0)
+    _play_sfx_placeholder("victory", 1.0, MUSIC_BUS)
 
 func play_error() -> void:
-    """Play error/negative feedback sound"""
-    _play_sfx_placeholder("error", bus=SFX_BUS, pitch=0.5)
+    _play_sfx_placeholder("error", 0.5, SFX_BUS)
+
+# Public alias used by other scripts (player, HUD)
+func play_sfx(sound_type: String, volume: float = 1.0, pitch: float = 1.0, bus: String = SFX_BUS) -> void:
+    _play_sfx_placeholder(sound_type, pitch, bus)
 
 # --- Helper Methods ---
 
 func _play_sfx_placeholder(sound_type: String, pitch: float = 1.0, bus: String = SFX_BUS) -> void:
-    """Placeholder for sound effects - in real implementation would play actual audio"""
-    # For now, just print what would be played
-    # In a real game, this would use AudioStreamPlayer to play actual sounds
     print("AudioManager: Would play %s sound (pitch: %.2f) on %s bus" % [sound_type, pitch, bus])
-    
-    # TODO: Replace with actual audio playback when audio files are added
-    # Example implementation:
-    # var player := AudioStreamPlayer3D.new() if is_3d else AudioStreamPlayer.new()
-    # player.stream = preload("res://audio/sfx/%s.ogg" % sound_type)
-    # player.pitch_scale = pitch
-    # audio_server.get_bus_index(bus) -> player.connect("finished", player, "queue_free")
-    # add_child(player)
-    # player.play()
 
 # --- Public API for Volume Control ---
 
