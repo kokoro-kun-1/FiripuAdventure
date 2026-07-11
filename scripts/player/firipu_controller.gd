@@ -163,7 +163,7 @@ func _physics_process(delta: float) -> void:
     var x_input := Input.get_axis("move_left", "move_right")
     _footstep_timer -= delta
     var z_input := Input.get_axis("move_forward", "move_back")
-    var speed := run_speed if Input.is_action_pressed("run") else walk_speed
+    var speed := (run_speed if Input.is_action_pressed("run") else walk_speed) * bike_multiplier
     var accel := ground_acceleration if is_on_floor() else air_acceleration
 
     if abs(x_input) > 0.01:
@@ -346,6 +346,32 @@ func set_medal_obtained(value: bool) -> void:
 
 func pick_environment_object(name: String) -> void:
     set_held_object(name)
+
+var bike_boost_active := false
+var bike_multiplier := 1.0
+var _bike_timer: Timer
+
+func mount_bike(duration: float = 6.0) -> void:
+    bike_boost_active = true
+    bike_multiplier = 1.8
+    if _bike_timer == null:
+        _bike_timer = Timer.new()
+        _bike_timer.one_shot = true
+        add_child(_bike_timer)
+        _bike_timer.timeout.connect(_on_bike_timeout)
+    _bike_timer.wait_time = duration
+    _bike_timer.start()
+    if audio != null and audio.has_method("play_sfx"):
+        audio.play_sfx("bike")
+    print("FIRIPU: bicicleta montada por " + str(duration) + "s")
+
+func dismount_bike() -> void:
+    bike_boost_active = false
+    bike_multiplier = 1.0
+    print("FIRIPU: bicicleta desmontada")
+
+func _on_bike_timeout() -> void:
+    dismount_bike()
 
 func _emit_hud() -> void:
     collected_changed.emit(collected, total_collectibles)
