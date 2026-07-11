@@ -6,6 +6,7 @@ extends Node3D
 @onready var robot: Node = $EscarabajoRobot
 @onready var boss: Node = $BossCosmicBeetle
 @onready var yuki: Node = $Yuki
+@onready var bike: Node = $Bike
 
 var flow_started := false
 var victory_reached := false

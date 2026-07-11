@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/los_rios_test.gd" id="1_los_rios"]
+
+[node name="LosRiosTest" type="Node"]
+script = ExtResource("1_los_rios")

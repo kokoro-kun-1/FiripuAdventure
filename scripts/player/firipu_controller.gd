@@ -389,6 +389,11 @@ func dismount_bike() -> void:
     bike_multiplier = 1.0
     print("FIRIPU: bicicleta desmontada")
 
+func _on_bike_timeout() -> void:
+    bike_boost_active = false
+    bike_multiplier = 1.0
+    print("FIRIPU: impulso de bicicleta finalizado")
+
 # Vapor termal (Ñuble): activa/desactiva el ascensor de vapor.
 func set_in_steam(active: bool) -> void:
     if active == _in_steam:
@@ -401,8 +406,110 @@ func set_in_steam(active: bool) -> void:
 func is_in_steam() -> bool:
     return _in_steam
 
-func _on_bike_timeout() -> void:
-    dismount_bike()
+# Piñón luminoso (Araucanía): impulso de trepada temporal.
+var climb_boost_active := false
+var climb_boost_timer: Timer
+
+func activate_climb_boost(duration: float = 8.0) -> void:
+    climb_boost_active = true
+    if climb_boost_timer == null:
+        climb_boost_timer = Timer.new()
+        climb_boost_timer.one_shot = true
+        add_child(climb_boost_timer)
+        climb_boost_timer.timeout.connect(_on_climb_boost_timeout)
+    climb_boost_timer.wait_time = duration
+    climb_boost_timer.start()
+    if audio != null and audio.has_method("play_sfx"):
+        audio.play_sfx("collect", 1.0, 1.2)
+    print("FIRIPU: piñón luminoso activado por " + str(duration) + "s")
+
+func _on_climb_boost_timeout() -> void:
+    climb_boost_active = false
+    print("FIRIPU: impulso de trepada finalizado")
+
+# Hoja paraguas (Los Ríos): planeo suave bajo lluvia.
+var glide_boost_active := false
+var glide_boost_timer: Timer
+
+func activate_glide_boost(duration: float = 10.0) -> void:
+    glide_boost_active = true
+    if glide_boost_timer == null:
+        glide_boost_timer = Timer.new()
+        glide_boost_timer.one_shot = true
+        add_child(glide_boost_timer)
+        glide_boost_timer.timeout.connect(_on_glide_boost_timeout)
+    glide_boost_timer.wait_time = duration
+    glide_boost_timer.start()
+    if audio != null and audio.has_method("play_sfx"):
+        audio.play_sfx("collect", 1.0, 0.9)
+    print("FIRIPU: hoja paraguas activada por " + str(duration) + "s")
+
+func _on_glide_boost_timeout() -> void:
+    glide_boost_active = false
+    print("FIRIPU: planeo finalizado")
+
+# Balsa natural (Los Lagos): flotación temporal sobre agua.
+var raft_active := false
+var raft_timer: Timer
+
+func activate_raft(duration: float = 15.0) -> void:
+    raft_active = true
+    if raft_timer == null:
+        raft_timer = Timer.new()
+        raft_timer.one_shot = true
+        add_child(raft_timer)
+        raft_timer.timeout.connect(_on_raft_timeout)
+    raft_timer.wait_time = duration
+    raft_timer.start()
+    if audio != null and audio.has_method("play_sfx"):
+        audio.play_sfx("collect", 1.0, 0.8)
+    print("FIRIPU: balsa natural activada por " + str(duration) + "s")
+
+func _on_raft_timeout() -> void:
+    raft_active = false
+    print("FIRIPU: balsa natural finalizada")
+
+# Impulso viento patagónico (Aysén): saltos largos y controlados con viento.
+var wind_boost_active := false
+var wind_boost_timer: Timer
+
+func activate_wind_boost(duration: float = 12.0) -> void:
+    wind_boost_active = true
+    if wind_boost_timer == null:
+        wind_boost_timer = Timer.new()
+        wind_boost_timer.one_shot = true
+        add_child(wind_boost_timer)
+        wind_boost_timer.timeout.connect(_on_wind_boost_timeout)
+    wind_boost_timer.wait_time = duration
+    wind_boost_timer.start()
+    if audio != null and audio.has_method("play_sfx"):
+        audio.play_sfx("jump", 0.7, 0.6)
+    print("FIRIPU: impulso viento patagónico activado por " + str(duration) + "s")
+
+func _on_wind_boost_timeout() -> void:
+    wind_boost_active = false
+    print("FIRIPU: impulso viento finalizado")
+
+# Botas de hielo (Magallanes): agarre perfecto sobre superficies heladas.
+var ice_boots_active := false
+var ice_boots_timer: Timer
+
+func activate_ice_boots(duration: float = 15.0) -> void:
+    ice_boots_active = true
+    if ice_boots_timer == null:
+        ice_boots_timer = Timer.new()
+        ice_boots_timer.one_shot = true
+        add_child(ice_boots_timer)
+        ice_boots_timer.timeout.connect(_on_ice_boots_timeout)
+    ice_boots_timer.wait_time = duration
+    ice_boots_timer.start()
+    if audio != null and audio.has_method("play_sfx"):
+        audio.play_sfx("collect", 1.0, 0.7)
+    print("FIRIPU: botas de hielo activadas por " + str(duration) + "s")
+
+func _on_ice_boots_timeout() -> void:
+    ice_boots_active = false
+    print("FIRIPU: botas de hielo finalizadas")
 
 func _emit_hud() -> void:
     collected_changed.emit(collected, total_collectibles)

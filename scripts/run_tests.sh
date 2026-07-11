@@ -2,10 +2,37 @@
 set -uo pipefail
 
 PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && { pwd -W 2>/dev/null || pwd; })"
-GODOT_BIN="${GODOT_BIN:-godot4}"
+
+# Auto-detect Godot binary on Windows if not explicitly set
+if [ -z "${GODOT_BIN:-}" ]; then
+    if command -v cygpath >/dev/null 2>&1; then
+        # Windows (git-bash/MSYS) - try common install locations
+        # Get username from HOME path since $USER may be unbound
+        _home_user="$(basename "$HOME" 2>/dev/null || echo "$USERNAME")"
+        for candidate in \
+            "C:/Program Files/Godot/Godot_v4.2.2-stable_win64.exe" \
+            "C:/Program Files/Godot/Godot_v4.3-stable_win64.exe" \
+            "C:/Users/$_home_user/Godot/Godot_v4.2.2-stable_win64.exe" \
+            "C:/Users/$_home_user/Godot/Godot_v4.3-stable_win64.exe" \
+            "/c/Program Files/Godot/Godot_v4.2.2-stable_win64.exe" \
+            "/c/Program Files/Godot/Godot_v4.3-stable_win64.exe" \
+            "/c/Users/$_home_user/Godot/Godot_v4.2.2-stable_win64.exe" \
+            "/c/Users/$_home_user/Godot/Godot_v4.3-stable_win64.exe"; do
+            if [ -f "$candidate" ]; then
+                GODOT_BIN="$candidate"
+                break
+            fi
+        done
+        # Fallback to godot4 if in PATH
+        GODOT_BIN="${GODOT_BIN:-godot4}"
+    else
+        # Linux/Mac - use godot4 from PATH
+        GODOT_BIN="${GODOT_BIN:-godot4}"
+    fi
+fi
 
 # En Windows (git-bash/MSYS) el binario nativo de Godot no acepta rutas
-# estilo /c/Users/...; hay que convertirlas a C:\Users\... con cygpath.
+# estilo /c/Users/...; hay que convertirlas a C:\\Users\\... con cygpath.
 if command -v cygpath >/dev/null 2>&1; then
   PROJECT_DIR="$(cygpath -m "$PROJECT_DIR")"
 fi
@@ -24,6 +51,11 @@ TEST_SCENES=(
   "res://tests/diary_test.tscn"
   "res://tests/audio_test.tscn"
   "res://tests/nuble_test.tscn"
+  "res://tests/araucania_test.tscn"
+  "res://tests/los_rios_test.tscn"
+  "res://tests/los_lagos_test.tscn"
+  "res://tests/aysen_test.tscn"
+  "res://tests/magallanes_test.tscn"
 )
 
 printf 'Running Firipu Adventure tests with %s\n' "$GODOT_BIN"

@@ -1,0 +1,293 @@
+[gd_scene load_steps=29 format=3]
+
+[ext_resource type="Script" path="res://scripts/levels/level_magallanes.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/player/firipu.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/companions/yuki.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://scenes/companions/kira.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://scenes/collectibles/collectible_base.tscn" id="5"]
+[ext_resource type="PackedScene" path="res://scenes/items/piedra.tscn" id="7"]
+[ext_resource type="PackedScene" path="res://scenes/items/rama.tscn" id="8"]
+[ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="9"]
+[ext_resource type="Script" path="res://scripts/camera/side_camera_follow.gd" id="10"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/boss_cosmic_beetle.tscn" id="12"]
+[ext_resource type="PackedScene" path="res://scenes/items/botas_hielo.tscn" id="13"]
+
+[sub_resource type="StandardMaterial3D" id="MatIce"]
+albedo_color = Color(0.85, 0.92, 0.98, 1)
+
+[sub_resource type="StandardMaterial3D" id="MatTundra"]
+albedo_color = Color(0.42, 0.48, 0.52, 1)
+
+[sub_resource type="StandardMaterial3D" id="MatBog"]
+albedo_color = Color(0.28, 0.32, 0.28, 1)
+
+[sub_resource type="StandardMaterial3D" id="MatPlatform"]
+albedo_color = Color(0.50, 0.46, 0.42, 1)
+
+[sub_resource type="StandardMaterial3D" id="MatSky"]
+albedo_color = Color(0.55, 0.70, 0.85, 1)
+
+[sub_resource type="StandardMaterial3D" id="MatMedal"]
+albedo_color = Color(0.75, 0.85, 0.98, 1)
+
+[sub_resource type="StandardMaterial3D" id="MatTrunk"]
+albedo_color = Color(0.28, 0.18, 0.12, 1)
+
+[sub_resource type="StandardMaterial3D" id="MatCanopy"]
+albedo_color = Color(0.10, 0.35, 0.30, 1)
+
+[sub_resource type="BoxMesh" id="GroundMesh"]
+size = Vector3(70, 0.4, 5)
+
+[sub_resource type="BoxShape3D" id="GroundShape"]
+size = Vector3(70, 0.4, 5)
+
+[sub_resource type="BoxMesh" id="PlatformMesh"]
+size = Vector3(4, 0.35, 2.8)
+
+[sub_resource type="BoxShape3D" id="PlatformShape"]
+size = Vector3(4, 0.35, 2.8)
+
+[sub_resource type="BoxMesh" id="IceSheetMesh"]
+size = Vector3(15, 0.2, 4)
+
+[sub_resource type="BoxMesh" id="SkyPanelMesh"]
+size = Vector3(80, 25, 0.2)
+
+[sub_resource type="BoxMesh" id="MedalMesh"]
+size = Vector3(0.9, 0.9, 0.16)
+
+[sub_resource type="SphereShape3D" id="MedalAreaShape"]
+radius = 1.3
+
+[sub_resource type="CylinderMesh" id="TreeTrunkMesh"]
+radius = 0.35
+height = 6.0
+
+[sub_resource type="CylinderMesh" id="CanopyMesh"]
+top_radius = 0.0
+bottom_radius = 2.5
+height = 4.0
+
+[sub_resource type="StandardMaterial3D" id="MatRock"]
+albedo_color = Color(0.38, 0.40, 0.44, 1)
+
+[node name="LevelMagallanes" type="Node3D"]
+script = ExtResource("1")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+rotation = Vector3(-0.6, 0.5, 0)
+light_energy = 1.0
+
+[node name="SideCamera" type="Camera3D" parent="."]
+position = Vector3(-24, 8, 24)
+script = ExtResource("10")
+target_path = NodePath("../Firipu")
+
+[node name="SkyPanel" type="MeshInstance3D" parent="."]
+position = Vector3(0, 8, -10)
+mesh = SubResource("SkyPanelMesh")
+material_override = SubResource("MatSky")
+
+[node name="Ground" type="StaticBody3D" parent="."]
+position = Vector3(0, 0, 0)
+
+[node name="GroundMesh" type="MeshInstance3D" parent="Ground"]
+mesh = SubResource("GroundMesh")
+material_override = SubResource("MatIce")
+
+[node name="GroundCollision" type="CollisionShape3D" parent="Ground"]
+shape = SubResource("GroundShape")
+
+[node name="IceSheetA" type="StaticBody3D" parent="."]
+position = Vector3(-20, 0.3, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="IceSheetA"]
+mesh = SubResource("IceSheetMesh")
+material_override = SubResource("MatIce")
+
+[node name="Collision" type="CollisionShape3D" parent="IceSheetA"]
+shape = SubResource("PlatformShape")
+
+[node name="IceSheetB" type="StaticBody3D" parent="."]
+position = Vector3(8, 0.3, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="IceSheetB"]
+mesh = SubResource("IceSheetMesh")
+material_override = SubResource("MatIce")
+
+[node name="Collision" type="CollisionShape3D" parent="IceSheetB"]
+shape = SubResource("PlatformShape")
+
+[node name="IceSheetC" type="StaticBody3D" parent="."]
+position = Vector3(30, 0.3, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="IceSheetC"]
+mesh = SubResource("IceSheetMesh")
+material_override = SubResource("MatIce")
+
+[node name="Collision" type="CollisionShape3D" parent="IceSheetC"]
+shape = SubResource("PlatformShape")
+
+[node name="HighPlatform1" type="StaticBody3D" parent="."]
+position = Vector3(-12, 3.5, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="HighPlatform1"]
+mesh = SubResource("PlatformMesh")
+material_override = SubResource("MatPlatform")
+
+[node name="Collision" type="CollisionShape3D" parent="HighPlatform1"]
+shape = SubResource("PlatformShape")
+
+[node name="HighPlatform2" type="StaticBody3D" parent="."]
+position = Vector3(6, 6.0, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="HighPlatform2"]
+mesh = SubResource("PlatformMesh")
+material_override = SubResource("MatPlatform")
+
+[node name="Collision" type="CollisionShape3D" parent="HighPlatform2"]
+shape = SubResource("PlatformShape")
+
+[node name="HighPlatform3" type="StaticBody3D" parent="."]
+position = Vector3(24, 8.5, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="HighPlatform3"]
+mesh = SubResource("PlatformMesh")
+material_override = SubResource("MatPlatform")
+
+[node name="Collision" type="CollisionShape3D" parent="HighPlatform3"]
+shape = SubResource("PlatformShape")
+
+[node name="Firipu" parent="." instance=ExtResource("2")]
+position = Vector3(-28, 1, 0)
+
+[node name="Yuki" parent="." instance=ExtResource("3")]
+position = Vector3(-29.6, 0.55, -0.8)
+target_path = NodePath("../Firipu")
+
+[node name="Kira" parent="." instance=ExtResource("4")]
+position = Vector3(-30.4, 0.55, 0.8)
+target_path = NodePath("../Firipu")
+
+[node name="BotasHieloA" parent="." instance=ExtResource("13")]
+position = Vector3(-20, 1.5, 0)
+
+[node name="BotasHieloB" parent="." instance=ExtResource("13")]
+position = Vector3(2, 4.5, 0)
+
+[node name="BotasHieloC" parent="." instance=ExtResource("13")]
+position = Vector3(22, 7.5, 0)
+
+[node name="BotasHieloD" parent="." instance=ExtResource("13")]
+position = Vector3(38, 10.5, 0)
+
+[node name="EscarabajoAustral" parent="." instance=ExtResource("5")]
+position = Vector3(-22, 0.85, 0)
+label = "Escarabajo austral"
+diary_text = "Adaptado al frío extremo, recorre la estepa y orillas de turberas."
+
+[node name="PolillaTurbera" parent="." instance=ExtResource("5")]
+position = Vector3(-6, 4.2, 0.3)
+label = "Polilla de turbera"
+diary_text = "Nocturna, alas mates; poliniza plantas de turbera en noches australes."
+
+[node name="InvertebradoTurbera" parent="." instance=ExtResource("5")]
+position = Vector3(16, 7.2, -0.4)
+label = "Pequeño invertebrado de turbera"
+diary_text = "Microfauna única de sphagnum; indicadora de humedales prístinos."
+
+[node name="MariposaAustral" parent="." instance=ExtResource("5")]
+position = Vector3(18, 0.9, 0.4)
+label = "Mariposa austral"
+diary_text = "Vuela bajo entre coirón y neneo; sus alas reflejan el hielo."
+
+[node name="Piedra" parent="." instance=ExtResource("7")]
+position = Vector3(-4, 0.45, 1.25)
+
+[node name="Rama" parent="." instance=ExtResource("8")]
+position = Vector3(20, 0.45, 0.8)
+
+[node name="PenguinRobot" parent="." instance=ExtResource("12")]
+position = Vector3(42, 0.6, 0)
+
+[node name="MedalArea" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 2
+position = Vector3(46, 1.15, 0)
+
+[node name="MedalVisual" type="MeshInstance3D" parent="MedalArea"]
+rotation = Vector3(0, 0, 0.785398)
+mesh = SubResource("MedalMesh")
+material_override = SubResource("MatMedal")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MedalArea"]
+shape = SubResource("MedalAreaShape")
+
+[node name="TundraRockA" type="MeshInstance3D" parent="."]
+position = Vector3(-14, 1.0, -1.5)
+scale = Vector3(1.5, 1.2, 1.3)
+mesh = SubResource("PlatformMesh")
+material_override = SubResource("MatRock")
+
+[node name="TundraRockB" type="MeshInstance3D" parent="."]
+position = Vector3(14, 1.0, 2.0)
+scale = Vector3(1.2, 1.0, 1.1)
+mesh = SubResource("PlatformMesh")
+material_override = SubResource("MatRock")
+
+[node name="TundraRockC" type="MeshInstance3D" parent="."]
+position = Vector3(38, 1.0, -1.5)
+scale = Vector3(1.3, 1.1, 1.2)
+mesh = SubResource("PlatformMesh")
+material_override = SubResource("MatRock")
+
+[node name="BogA" type="MeshInstance3D" parent="."]
+position = Vector3(-10, 0.5, -2.0)
+scale = Vector3(2.0, 0.6, 1.5)
+mesh = SubResource("PlatformMesh")
+material_override = SubResource("MatBog")
+
+[node name="BogB" type="MeshInstance3D" parent="."]
+position = Vector3(18, 0.5, 2.0)
+scale = Vector3(1.5, 0.5, 1.3)
+mesh = SubResource("PlatformMesh")
+material_override = SubResource("MatBog")
+
+[node name="BogC" type="MeshInstance3D" parent="."]
+position = Vector3(34, 0.5, -1.8)
+scale = Vector3(1.8, 0.7, 1.4)
+mesh = SubResource("PlatformMesh")
+material_override = SubResource("MatBog")
+
+[node name="TreeA_Trunk" type="MeshInstance3D" parent="."]
+position = Vector3(-24, 3, -2.1)
+mesh = SubResource("TreeTrunkMesh")
+material_override = SubResource("MatTrunk")
+
+[node name="TreeA_Canopy" type="MeshInstance3D" parent="."]
+position = Vector3(-24, 6, -2.1)
+mesh = SubResource("CanopyMesh")
+material_override = SubResource("MatCanopy")
+
+[node name="TreeB_Trunk" type="MeshInstance3D" parent="."]
+position = Vector3(-4, 3, -2.2)
+mesh = SubResource("TreeTrunkMesh")
+material_override = SubResource("MatTrunk")
+
+[node name="TreeB_Canopy" type="MeshInstance3D" parent="."]
+position = Vector3(-4, 6, -2.2)
+mesh = SubResource("CanopyMesh")
+material_override = SubResource("MatCanopy")
+
+[node name="TreeC_Trunk" type="MeshInstance3D" parent="."]
+position = Vector3(22, 3, -2.25)
+mesh = SubResource("TreeTrunkMesh")
+material_override = SubResource("MatTrunk")
+
+[node name="TreeC_Canopy" type="MeshInstance3D" parent="."]
+position = Vector3(22, 6, -2.25)
+mesh = SubResource("CanopyMesh")
+material_override = SubResource("MatCanopy")
+
+[node name="HUD" parent="." instance=ExtResource("9")]

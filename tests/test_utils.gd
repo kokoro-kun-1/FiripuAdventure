@@ -3,8 +3,8 @@ extends RefCounted
 const MAIN_SCENE_PATH: String = "res://scenes/levels/level_biobio_prototype.tscn"
 const SAVE_PATH: String = "user://savegame.save"
 
-static func load_main_level(runner: Node, test_name: String) -> Node:
-    var main_scene: PackedScene = load(MAIN_SCENE_PATH) as PackedScene
+static func load_main_level(runner: Node, test_name: String, scene_path: String = MAIN_SCENE_PATH) -> Node:
+    var main_scene: PackedScene = load(scene_path) as PackedScene
     if main_scene == null:
         fail(runner, test_name, "could not load main scene")
         return null
