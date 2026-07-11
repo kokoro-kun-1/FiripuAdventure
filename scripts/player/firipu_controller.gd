@@ -311,6 +311,13 @@ func _interact() -> void:
 func _use_item() -> void:
     if held_object == "Ninguno":
         return
+    # Si hay un enemigo/jefe cerca, aplica el objeto como ataque no violento.
+    if nearby_interactable != null and nearby_interactable.has_method("hit_by_environment_object"):
+        nearby_interactable.call("hit_by_environment_object", held_object)
+        _set_action_hint("Firipu usa %s contra el robot" % held_object)
+        held_object = "Ninguno"
+        object_changed.emit(held_object)
+        return
     _set_action_hint("Firipu usa: " + held_object)
     held_object = "Ninguno"
     object_changed.emit(held_object)
