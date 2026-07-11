@@ -6,6 +6,12 @@ signal load_requested
 signal exit_requested
 
 @onready var fauna_label: Label = $Panel/VBox/FaunaLabel
+@onready var diary_panel: Panel = $DiaryPanel
+@onready var diary_title: Label = $DiaryPanel/DiaryVBox/DiaryTitle
+@onready var diary_chinita: Label = $DiaryPanel/DiaryVBox/DiaryChinita
+@onready var diary_abejorro: Label = $DiaryPanel/DiaryVBox/DiaryAbejorro
+@onready var diary_libelula: Label = $DiaryPanel/DiaryVBox/DiaryLibelula
+@onready var diary_ranita: Label = $DiaryPanel/DiaryVBox/DiaryRanita
 @onready var object_label: Label = $Panel/VBox/ObjectLabel
 @onready var medal_label: Label = $Panel/VBox/MedalLabel
 @onready var state_label: Label = $Panel/VBox/StateLabel
@@ -107,6 +113,8 @@ func bind_player(player: Node) -> void:
         player.movement_state_changed.connect(_on_movement_state_changed)
     if player.has_signal("prototype_completed"):
         player.prototype_completed.connect(show_victory)
+    if player.has_signal("species_registered"):
+        player.species_registered.connect(_on_species_registered)
 
 func start_game() -> void:
     if game_started:
@@ -236,6 +244,25 @@ func _on_medal_state_changed(text: String) -> void:
     latest_medal = text
     if medal_label:
         medal_label.text = text
+
+const _SPECIES := {
+	"Chinita": "DiaryChinita",
+	"Abejorro": "DiaryAbejorro",
+	"Libélula": "DiaryLibelula",
+	"Ranita pequeña": "DiaryRanita",
+}
+
+func _on_species_registered(label: String) -> void:
+    var key: String = _SPECIES.get(label, "")
+    if key == "":
+        return
+    var lbl: Label = get_node_or_null("DiaryPanel/DiaryVBox/" + key)
+    if lbl == null:
+        return
+    lbl.text = "✓ " + label
+    lbl.modulate = Color(0.6, 1.0, 0.65, 1.0)
+    if diary_title:
+        diary_title.text = "Diario de Naturaleza — registradas"
 
 func _on_movement_state_changed(text: String) -> void:
     if state_label:

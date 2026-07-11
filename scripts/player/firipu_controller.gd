@@ -7,6 +7,7 @@ var _footstep_timer: float = 0.0
 var _last_footstep_time: float = 0.0
 
 signal collected_changed(count: int, total: int)
+signal species_registered(label: String)
 
 var audio
 signal medal_state_changed(text: String)
@@ -35,6 +36,7 @@ signal prototype_completed
 @export var jump_buffer_time := 0.14
 
 var collected := 0
+var registered_species: Array[String] = []
 var held_object := "Ninguno"
 var medal_obtained := false
 var nearby_interactable: Node = null
@@ -289,6 +291,9 @@ func register_collectible(label: String) -> void:
     if audio:
         audio.play_sfx("collect", 0.8, 0.9 + randf() * 0.3)
     print("Fauna registrada: " + str(collected) + "/" + str(total_collectibles) + " - " + label)
+    if not label in registered_species:
+        registered_species.append(label)
+        species_registered.emit(label)
     collected_changed.emit(collected, total_collectibles)
     if collected >= total_collectibles and not medal_obtained:
         medal_obtained = true
