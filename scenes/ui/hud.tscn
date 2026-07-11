@@ -328,3 +328,43 @@ theme_override_colors/font_color = Color(1, 0.95, 0.88, 1)
 theme_override_font_sizes/font_size = 16
 custom_minimum_size = Vector2(160, 42)
 text = "Salir"
+
+[node name="DiaryPanel" type="Panel" parent="."]
+theme_override_styles/panel = SubResource("StyleBoxFlat_hud_panel")
+offset_left = 12.0
+offset_top = 258.0
+offset_right = 380.0
+offset_bottom = 470.0
+
+[node name="DiaryVBox" type="VBoxContainer" parent="DiaryPanel"]
+offset_left = 14.0
+offset_top = 12.0
+offset_right = 354.0
+offset_bottom = 200.0
+theme_override_constants/separation = 4
+
+[node name="DiaryTitle" type="Label" parent="DiaryPanel/DiaryVBox"]
+theme_override_colors/font_color = Color(1, 0.86, 0.50, 1)
+theme_override_font_sizes/font_size = 17
+text = "Diario de Naturaleza"
+
+[node name="DiaryChinita" type="Label" parent="DiaryPanel/DiaryVBox"]
+theme_override_colors/font_color = Color(0.55, 0.62, 0.58, 1)
+theme_override_font_sizes/font_size = 15
+text = "— Chinita"
+
+[node name="DiaryAbejorro" type="Label" parent="DiaryPanel/DiaryVBox"]
+theme_override_colors/font_color = Color(0.55, 0.62, 0.58, 1)
+theme_override_font_sizes/font_size = 15
+text = "— Abejorro"
+
+[node name="DiaryLibelula" type="Label" parent="DiaryPanel/DiaryVBox"]
+theme_override_colors/font_color = Color(0.55, 0.62, 0.58, 1)
+theme_override_font_sizes/font_size = 15
+text = "— Libélula"
+
+[node name="DiaryRanita" type="Label" parent="DiaryPanel/DiaryVBox"]
+theme_override_colors/font_color = Color(0.55, 0.62, 0.58, 1)
+theme_override_font_sizes/font_size = 15
+text = "— Ranita pequeña"
+
