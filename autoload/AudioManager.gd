@@ -2,9 +2,7 @@ extends Node
 class_name AudioManager
 
 # Audio Manager for Firipu Adventure
-# Handles all sound effects and music for the game.
-# Real SFX are loaded at runtime from res://audio/sfx/ (see _load_streams).
-# Missing files fall back to procedurally generated tones.
+# Handles all sound effects and music for the game
 
 # Audio buses
 const MASTER_BUS := "Master"

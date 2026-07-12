@@ -153,6 +153,15 @@ func set_input_locked(locked: bool) -> void:
         velocity = Vector3.ZERO
         _set_movement_state("quieto")
 
+func set_nearby_interactable(interactable: Node) -> void:
+    nearby_interactable = interactable
+    _set_action_hint("E / X: interactuar")
+
+func clear_nearby_interactable(interactable: Node) -> void:
+    if nearby_interactable == interactable:
+        nearby_interactable = null
+        _set_action_hint("")
+
 func _physics_process(delta: float) -> void:
     if input_locked:
         _update_placeholder_animation("quieto", delta)
@@ -303,9 +312,7 @@ func register_collectible(label: String) -> void:
         species_registered.emit(label)
     collected_changed.emit(collected, total_collectibles)
     if collected >= total_collectibles and not medal_obtained:
-        medal_obtained = true
-        medal_state_changed.emit("Medalla: Obtenida")
-        prototype_completed.emit()
+        _set_action_hint("Diario completo. Ahora ayuda a Yuki a revelar el núcleo del jefe y recupera la medalla.")
 
 func set_held_object(text: String) -> void:
     held_object = text
