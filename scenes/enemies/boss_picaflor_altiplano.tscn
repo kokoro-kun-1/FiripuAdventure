@@ -1,0 +1,119 @@
+[gd_scene load_steps=13 format=3]
+
+[ext_resource type="Script" path="res://scripts/enemies/boss_picaflor_altiplano.gd" id="1"]
+
+[sub_resource type="StandardMaterial3D" id="MatBody"]
+albedo_color = Color(0.15, 0.55, 0.75, 1)
+metallic = 0.3
+roughness = 0.35
+
+[sub_resource type="StandardMaterial3D" id="MatWings"]
+albedo_color = Color(0.2, 0.6, 0.9, 1)
+emission_enabled = true
+emission = Color(0.3, 0.7, 1.0, 1)
+emission_energy_multiplier = 1.0
+
+[sub_resource type="StandardMaterial3D" id="MatChest"]
+albedo_color = Color(1.0, 0.75, 0.15, 1)
+
+[sub_resource type="StandardMaterial3D" id="MatBeak"]
+albedo_color = Color(0.8, 0.95, 1.0, 1)
+emission_enabled = true
+emission = Color(0.5, 0.9, 1.0, 1)
+emission_energy_multiplier = 1.5
+
+[sub_resource type="StandardMaterial3D" id="MatEye"]
+albedo_color = Color(1.0, 0.85, 0.10, 1)
+emission_enabled = true
+emission = Color(1.0, 0.70, 0.0, 1)
+emission_energy_multiplier = 1.4
+
+[sub_resource type="StandardMaterial3D" id="MatCore"]
+albedo_color = Color(1.0, 0.95, 0.30, 1)
+emission_enabled = true
+emission = Color(1.0, 0.85, 0.0, 1)
+emission_energy_multiplier = 2.2
+
+[sub_resource type="BoxMesh" id="BodyMesh"]
+size = Vector3(0.9, 0.7, 1.0)
+
+[sub_resource type="BoxMesh" id="WingMesh"]
+size = Vector3(2.0, 0.08, 0.8)
+
+[sub_resource type="CylinderMesh" id="BeakMesh"]
+radius = 0.06
+height = 0.35
+
+[sub_resource type="SphereMesh" id="EyeMesh"]
+radius = 0.1
+height = 0.18
+
+[sub_resource type="SphereMesh" id="CoreMesh"]
+radius = 0.25
+height = 0.5
+
+[sub_resource type="BoxShape3D" id="BoxShape_boss"]
+size = Vector3(2.2, 0.9, 1.2)
+
+[node name="PicaflorCosmico" type="CharacterBody3D"]
+script = ExtResource("1")
+
+[node name="Body" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.5, 0)
+mesh = SubResource("BodyMesh")
+material_override = SubResource("MatBody")
+
+[node name="Chest" type="MeshInstance3D" parent="Body"]
+position = Vector3(0, -0.15, 0.45)
+scale = Vector3(0.6, 0.7, 0.3)
+mesh = SubResource("BodyMesh")
+material_override = SubResource("MatChest")
+
+[node name="Beak" type="MeshInstance3D" parent="Body"]
+position = Vector3(0, 0.05, 0.45)
+mesh = SubResource("BeakMesh")
+material_override = SubResource("MatBeak")
+
+[node name="WingL" type="MeshInstance3D" parent="Body"]
+position = Vector3(-0.35, 0.1, 0.0)
+rotation = Vector3(0, 0, -0.1)
+mesh = SubResource("WingMesh")
+material_override = SubResource("MatWings")
+
+[node name="WingR" type="MeshInstance3D" parent="Body"]
+position = Vector3(0.35, 0.1, 0.0)
+rotation = Vector3(0, 0, 0.1)
+mesh = SubResource("WingMesh")
+material_override = SubResource("MatWings")
+
+[node name="EyeA" type="MeshInstance3D" parent="Body"]
+position = Vector3(-0.12, 0.18, 0.3)
+mesh = SubResource("EyeMesh")
+material_override = SubResource("MatEye")
+
+[node name="EyeB" type="MeshInstance3D" parent="Body"]
+position = Vector3(0.12, 0.18, 0.3)
+mesh = SubResource("EyeMesh")
+material_override = SubResource("MatEye")
+
+[node name="Core" type="MeshInstance3D" parent="Body"]
+position = Vector3(0.0, 0.1, 0.2)
+mesh = SubResource("CoreMesh")
+material_override = SubResource("MatCore")
+visible = false
+
+[node name="LegL" type="MeshInstance3D" parent="Body"]
+position = Vector3(-0.08, -0.25, 0.2)
+scale = Vector3(0.06, 0.3, 0.06)
+mesh = SubResource("BeakMesh")
+material_override = SubResource("MatBeak")
+
+[node name="LegR" type="MeshInstance3D" parent="Body"]
+position = Vector3(0.08, -0.25, 0.2)
+scale = Vector3(0.06, 0.3, 0.06)
+mesh = SubResource("BeakMesh")
+material_override = SubResource("MatBeak")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.5, 0)
+shape = SubResource("BoxShape_boss")

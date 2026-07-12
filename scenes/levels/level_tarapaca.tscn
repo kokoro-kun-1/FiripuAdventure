@@ -9,7 +9,7 @@
 [ext_resource type="PackedScene" path="res://scenes/items/rama.tscn" id="8"]
 [ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="9"]
 [ext_resource type="Script" path="res://scripts/camera/side_camera_follow.gd" id="10"]
-[ext_resource type="PackedScene" path="res://scenes/enemies/boss_cosmic_beetle.tscn" id="12"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/boss_lagarto_tarapaca.tscn" id="12"]
 [ext_resource type="PackedScene" path="res://scenes/items/cristal_antiespejismo.tscn" id="13"]
 
 [sub_resource type="StandardMaterial3D" id="MatDesertFloor"]
@@ -141,12 +141,12 @@ diary_text = "Endémica de quebradas del norte; tolera sequía extrema."
 
 [node name="EscarabajoDesierto" parent="." instance=ExtResource("5")]
 position = Vector3(-4, 4.2, 0.3)
-label = "Escarabajo del desierto"
+label = "Escarabajo de desierto"
 diary_text = "Recicla materia orgánica bajo la arena; activo al amanecer."
 
 [node name="AranitaArida" parent="." instance=ExtResource("5")]
-position = Vector3(14, 6.2, -0.4)
-label = "Arañita árida"
+position = Vector3(12, 7.2, -0.4)
+label = "Araña pequeña árida"
 diary_text = "Teje telarañas entre rocas para capturar insectos escasos."
 
 [node name="MariposaOasis" parent="." instance=ExtResource("5")]

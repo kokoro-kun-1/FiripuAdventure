@@ -9,7 +9,7 @@
 [ext_resource type="PackedScene" path="res://scenes/items/rama.tscn" id="8"]
 [ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="9"]
 [ext_resource type="Script" path="res://scripts/camera/side_camera_follow.gd" id="10"]
-[ext_resource type="PackedScene" path="res://scenes/enemies/boss_cosmic_beetle.tscn" id="12"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/boss_huillin_los_lagos.tscn" id="12"]
 [ext_resource type="PackedScene" path="res://scenes/items/balsa_natural.tscn" id="13"]
 
 [sub_resource type="StandardMaterial3D" id="MatLakeFloor"]

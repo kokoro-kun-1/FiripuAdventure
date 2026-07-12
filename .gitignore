@@ -18,6 +18,7 @@ export_presets.cfg
 
 # Builds
 [Bb]uilds/
+builds_test/
 [Ee]xport/
 [Ee]xports/
 *.exe

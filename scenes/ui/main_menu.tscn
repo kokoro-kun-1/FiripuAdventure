@@ -1,0 +1,143 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/main_menu.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/ui/region_selector.tscn" id="2"]
+
+[sub_resource type="StandardMaterial3D" id="MatTitleBG"]
+albedo_color = Color(0.08, 0.12, 0.18, 1)
+
+[sub_resource type="StandardMaterial3D" id="MatButtonNormal"]
+albedo_color = Color(0.18, 0.28, 0.42, 1)
+
+[sub_resource type="StandardMaterial3D" id="MatButtonHover"]
+albedo_color = Color(0.25, 0.38, 0.55, 1)
+
+[sub_resource type="StandardMaterial3D" id="MatButtonPressed"]
+albedo_color = Color(0.12, 0.20, 0.32, 1)
+
+[sub_resource type="StandardMaterial3D" id="MatButtonDisabled"]
+albedo_color = Color(0.10, 0.14, 0.18, 0.5)
+transparency = 1
+
+[sub_resource type="StandardMaterial3D" id="MatPanelBG"]
+albedo_color = Color(0.05, 0.08, 0.12, 0.9)
+transparency = 1
+
+[sub_resource type="BoxMesh" id="PanelMesh"]
+size = Vector3(8, 0.1, 6)
+
+[sub_resource type="BoxMesh" id="ButtonMesh"]
+size = Vector3(4, 0.1, 1.2)
+
+[sub_resource type="StandardMaterial3D" id="MatTitleText"]
+albedo_color = Color(1.0, 0.85, 0.25, 1)
+emission_enabled = true
+emission = Color(1.0, 0.8, 0.15, 1)
+emission_energy_multiplier = 0.8
+
+[sub_resource type="StandardMaterial3D" id="MatSubtitleText"]
+albedo_color = Color(0.85, 0.9, 0.98, 1)
+
+[node name="MainMenu" type="Control"]
+script = ExtResource("1")
+anchor_bottom = 1.0
+anchor_right = 1.0
+
+[node name="Background" type="ColorRect" parent="."]
+anchor_bottom = 1.0
+anchor_right = 1.0
+color = Color(0.02, 0.03, 0.05, 1)
+
+[node name="DecorativeParticles" type="GPUParticles2D" parent="Background"]
+emitting = true
+amount = 50
+lifetime = 8.0
+one_shot = false
+pre_process_time = 2.0
+speed_scale = 0.3
+explosiveness = 0.0
+local_coords = false
+gravity = Vector2(0, -5)
+direction = Vector2(0, -1)
+spread = 45
+initial_velocity = 15.0
+scale = Vector2(0.8, 0.8)
+scale_curve = Curve()
+color_initial_ramp = Gradient()
+color_ramp = Gradient()
+color_ramp.points = [Vector2(0, 1), Vector2(1, 0)]
+color_ramp.colors = [Color(0.3, 0.6, 1.0, 0.3), Color(0.6, 0.8, 1.0, 0.1), Color(1.0, 0.9, 0.4, 0.0)]
+
+[node name="MainPanel" type="PanelContainer" parent="."]
+anchor_bottom = 1.0
+anchor_right = 1.0
+anchor_left = 0.5
+anchor_top = 0.5
+offset_bottom = 180
+offset_right = -180
+offset_left = 180
+offset_top = -180
+
+[node name="VBox" type="VBoxContainer" parent="MainPanel"]
+alignment = 2
+
+[node name="TitleLabel" type="Label" parent="VBox"]
+text = "Firipu Adventure"
+horizontal_alignment = 2
+vertical_alignment = 1
+autowrap_mode = 0
+font_size = 48
+font_color = Color(1.0, 0.85, 0.25, 1)
+outline_size = 2
+outline_color = Color(0.0, 0.0, 0.0, 1)
+
+[node name="SubtitleLabel" type="Label" parent="VBox"]
+text = "Explora Chile con Firipu, Yuki y Kira"
+horizontal_alignment = 2
+font_size = 18
+font_color = Color(0.85, 0.9, 0.98, 1)
+
+[node name="Separator1" type="HSeparator" parent="VBox"]
+modulate = Color(0.3, 0.5, 0.7, 0.5)
+
+[node name="ButtonsVBox" type="VBoxContainer" parent="VBox"]
+alignment = 2
+
+[node name="ContinueButton" type="Button" parent="ButtonsVBox"]
+text = "Continuar partida"
+custom_minimum_size = Vector2(300, 50)
+tooltip_text = "Carga tu partida guardada más reciente"
+
+[node name="NewGameButton" type="Button" parent="ButtonsVBox"]
+text = "Nueva aventura"
+custom_minimum_size = Vector2(300, 50)
+tooltip_text = "Comienza desde el Biobío"
+
+[node name="RegionSelectButton" type="Button" parent="ButtonsVBox"]
+text = "Seleccionar región"
+custom_minimum_size = Vector2(300, 50)
+tooltip_text = "Elige cualquier región desbloqueada"
+
+[node name="Separator2" type="HSeparator" parent="VBox"]
+modulate = Color(0.3, 0.5, 0.7, 0.5)
+
+[node name="SettingsButton" type="Button" parent="ButtonsVBox"]
+text = "Configuración"
+custom_minimum_size = Vector2(300, 50)
+
+[node name="CreditsButton" type="Button" parent="ButtonsVBox"]
+text = "Créditos"
+custom_minimum_size = Vector2(300, 50)
+
+[node name="QuitButton" type="Button" parent="ButtonsVBox"]
+text = "Salir"
+custom_minimum_size = Vector2(300, 50)
+
+[node name="VersionLabel" type="Label" parent="VBox"]
+text = "Prototipo 0.2  |  Hecho con Godot 4"
+horizontal_alignment = 2
+font_size = 12
+font_color = Color(0.4, 0.5, 0.6, 1)
+
+[node name="RegionSelector" parent="." instance=ExtResource("2")]
+visible = false

@@ -75,9 +75,9 @@ func _run_test() -> void:
 		TestUtils.fail(self, TEST_NAME, "boss missing expose_core")
 		return
 
-	# Forzar fase de núcleo
-	boss.set("phase", 3)
-	boss.set("_phase_timer", 999.0)
+	# Forzar fase vulnerable (núcleo expuesto) directamente
+	boss.call("force_vulnerable")
+
 	await get_tree().process_frame
 
 	# Yuki detecta punto débil
