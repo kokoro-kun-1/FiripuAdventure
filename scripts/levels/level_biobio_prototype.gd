@@ -269,7 +269,9 @@ func _update_progress_gates() -> void:
 		var gate := gates.get_child(index) as StaticBody3D
 		var unlocked := collected >= int(gate.get_meta("required_count"))
 		if index == 3:
-			unlocked = unlocked and int(robot.get("state")) == 3
+			# El último gate exige el Diario completo Y el jefe (BossCosmicBeetle) derrotado.
+			# El robot básico (EscarabajoRobot) no tiene fases; el flag correcto es `defeated` del jefe.
+			unlocked = unlocked and bool(boss.get("defeated"))
 		var collision := gate.get_child(0) as CollisionShape3D
 		collision.set_deferred("disabled", unlocked)
 		gate.visible = not unlocked
