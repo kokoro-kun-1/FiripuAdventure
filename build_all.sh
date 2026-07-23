@@ -36,6 +36,11 @@ PRESETS=(
   "macOS"
 )
 
+# Presets que NO se pueden exportar desde Windows porque requieren firmar
+# con `codesign` (solo disponible en macOS). El preset queda en el .cfg para
+# cuando corras el build en una Mac; aca se marcan como SKIP, no como FALLO.
+MAC_ONLY_PRESETS=("macOS")
+
 # Mata cualquier instancia previa de Godot (evita zombis bajo MSYS headless)
 _kill_godot() {
   if command -v taskkill >/dev/null 2>&1; then
@@ -65,8 +70,27 @@ fi
 
 _kill_godot
 
+# ¿Estamos en Windows (no podemos firmar macOS)?
+IS_WINDOWS=false
+case "$(uname -s 2>/dev/null)" in
+  MINGW*|MSYS*|CYGWIN*|Windows_NT) IS_WINDOWS=true ;;
+esac
+
 FAIL=0
 for p in "${PRESETS[@]}"; do
+  # Presets que solo se construyen en macOS: saltarlos fuera de Mac
+  skip=false
+  for mp in "${MAC_ONLY_PRESETS[@]}"; do
+    [ "$p" = "$mp" ] && skip=true && break
+  done
+  if $skip && ! $IS_WINDOWS; then
+    : # en una Mac SI se construye
+  elif $skip; then
+    echo ""
+    echo ">> SKIP preset: $p  (requiere macOS/codesign; no se puede firmar desde Windows)"
+    continue
+  fi
+
   echo ""
   echo ">> Exportando preset: $p"
   # Sin ruta final: usa export_path del preset (relativo al proyecto)
