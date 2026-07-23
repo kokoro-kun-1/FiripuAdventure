@@ -30,6 +30,8 @@ func _ready() -> void:
 		if player.has_method("set_input_locked"):
 			player.set_input_locked(true)
 		medal_area.body_entered.connect(_on_medal_area_body_entered)
+		if player.has_signal("collected_changed"):
+			player.collected_changed.connect(_on_route_progress_changed)
 		if player.has_signal("prototype_completed"):
 			player.prototype_completed.connect(_on_prototype_completed)
 	if boss != null and boss.has_signal("boss_defeated"):
@@ -76,11 +78,18 @@ func _on_exit_requested() -> void:
 	get_tree().quit(0)
 
 func _on_medal_area_body_entered(body: Node) -> void:
-	if body == player and player.has_method("obtain_medal"):
+	if body == player and int(player.get("collected")) >= 4 and bool(boss.get("defeated")) and player.has_method("obtain_medal"):
 		player.obtain_medal()
+	elif body == player and hud.has_method("show_message"):
+		hud.show_message("La medalla se libera al completar el Diario y calmar al guardian.")
+
 
 func _on_prototype_completed() -> void:
 	set_world_completed(true)
+	var global_progress := get_node_or_null("/root/GlobalProgress")
+	if global_progress != null:
+		global_progress.complete_world("los_rios")
+		global_progress.force_save()
 	print("FLOW_VICTORY Mundo 4 Los Ríos")
 	_on_save_requested()
 
@@ -125,3 +134,6 @@ func _unhandled_input(event: InputEvent) -> void:
 			_on_save_requested()
 		elif event.keycode == KEY_F9:
 			_on_load_requested()
+
+func _on_route_progress_changed(_count: int, _total: int) -> void:
+	pass
