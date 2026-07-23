@@ -1,0 +1,405 @@
+{
+  "project": "Firipu Adventure",
+  "engine": "Godot 4",
+  "progression": "linear",
+  "target_minutes_per_world": 15,
+  "collectibles_per_region": 4,
+  "combat_model": {
+    "style": "dodge_and_environmental_hits",
+    "allowed_environment_items": [
+      "palos",
+      "piedras",
+      "ramas",
+      "tierra",
+      "agua"
+    ],
+    "goal": "aturdir, empujar, desviar o desactivar fauna robot espacial",
+    "rule": "la fauna real se observa, registra o protege; no es enemiga"
+  },
+  "regions": [
+    {
+      "order": 1,
+      "id": "biobio",
+      "region_name": "Región del Biobío",
+      "world_name": "Biobío Silvestre",
+      "main_environment": "bosque nativo, riberas de río, humedales y cerros verdes",
+      "tone": "tutorial natural, familiar y equilibrado",
+      "collectibles": [
+        "Chinita",
+        "Abejorro",
+        "Libélula",
+        "Ranita pequeña"
+      ],
+      "priority_species": "Ranita pequeña de bosque húmedo",
+      "robot_enemies": [
+        "Escarabajo robot explorador",
+        "Rana robot saltarina",
+        "Avispa metálica"
+      ],
+      "boss": "Gran Escarabajo Cósmico del Biobío",
+      "medal": "Medalla del Bosque y Río del Biobío",
+      "temporary_power_or_mechanic": "Bicicleta de montaña temporal",
+      "main_gameplay_focus": "enseñar movimiento, salto, carrera, Yuki detectando secretos y Kira activando mecanismos"
+    },
+    {
+      "order": 2,
+      "id": "nuble",
+      "region_name": "Región de Ñuble",
+      "world_name": "Montañas de Ñuble",
+      "main_environment": "cordillera, bosques nativos, ríos, termas naturales y zonas de vapor",
+      "tone": "montaña cálida-fría con vapor y bosque",
+      "collectibles": [
+        "Escarabajo de tronco",
+        "Ranita de bosque",
+        "Libélula de río",
+        "Lagartija de cordillera"
+      ],
+      "priority_species": "Huemul",
+      "robot_enemies": [
+        "Escarabajo geotérmico robot",
+        "Lagartija metálica de cordillera",
+        "Dron cóndor de nieve"
+      ],
+      "boss": "Huemul Robot Guardián de Ñuble",
+      "medal": "Medalla de los Nevados y Termas",
+      "temporary_power_or_mechanic": "Vapor termal para saltos altos",
+      "main_gameplay_focus": "plataformas verticales, chorros de vapor y rutas entre rocas húmedas"
+    },
+    {
+      "order": 3,
+      "id": "araucania",
+      "region_name": "Región de La Araucanía",
+      "world_name": "Araucarias del Volcán",
+      "main_environment": "bosques de araucarias, volcanes, lagos, nieve alta y senderos ancestrales",
+      "tone": "bosque alto, volcánico y místico",
+      "collectibles": [
+        "Monito del monte",
+        "Ranita de Darwin",
+        "Escarabajo de bosque húmedo",
+        "Polilla de araucaria"
+      ],
+      "priority_species": "Ranita de Darwin",
+      "robot_enemies": [
+        "Rana robot camuflada",
+        "Escarabajo de lava mecánico",
+        "Dron semilla de araucaria"
+      ],
+      "boss": "Gran Rana Robot del Volcán",
+      "medal": "Medalla de la Araucaria y el Volcán",
+      "temporary_power_or_mechanic": "Piñón luminoso para trepar araucarias",
+      "main_gameplay_focus": "subir árboles gigantes, cruzar troncos y evitar zonas volcánicas suaves"
+    },
+    {
+      "order": 4,
+      "id": "los_rios",
+      "region_name": "Región de Los Ríos",
+      "world_name": "Selva Lluviosa de Los Ríos",
+      "main_environment": "selva valdiviana, lluvia, ríos, humedales, troncos y helechos grandes",
+      "tone": "húmedo, verde, secreto y sonoro",
+      "collectibles": [
+        "Caracol de bosque",
+        "Libélula de río",
+        "Ranita de Darwin",
+        "Escarabajo de musgo"
+      ],
+      "priority_species": "Monito del monte",
+      "robot_enemies": [
+        "Caracol robot blindado",
+        "Libélula eléctrica",
+        "Güiña robot sigilosa"
+      ],
+      "boss": "Caracol Blindado Espacial de la Lluvia",
+      "medal": "Medalla de la Selva Valdiviana",
+      "temporary_power_or_mechanic": "Hoja paraguas para planear bajo lluvia",
+      "main_gameplay_focus": "superficies resbalosas, lluvia, troncos-puente y secretos bajo hojas"
+    },
+    {
+      "order": 5,
+      "id": "los_lagos",
+      "region_name": "Región de Los Lagos",
+      "world_name": "Lagos, Volcanes e Islas",
+      "main_environment": "lagos, volcanes, bosques templados, costa, islas y rutas de agua",
+      "tone": "acuático, isleño y de bosque profundo",
+      "collectibles": [
+        "Monito del monte",
+        "Caracol de bosque húmedo",
+        "Libélula de lago",
+        "Ranita de bosque"
+      ],
+      "priority_species": "Huillín",
+      "robot_enemies": [
+        "Nutria robot acuática",
+        "Cangrejo mecánico de costa",
+        "Dron volcánico"
+      ],
+      "boss": "Huillín Robot de los Lagos",
+      "medal": "Medalla del Lago y el Volcán",
+      "temporary_power_or_mechanic": "Balsa natural temporal",
+      "main_gameplay_focus": "cruzar islas pequeñas, plataformas flotantes y rutas de bosque junto al agua"
+    },
+    {
+      "order": 6,
+      "id": "aysen",
+      "region_name": "Región de Aysén",
+      "world_name": "Viento Patagónico de Aysén",
+      "main_environment": "fiordos, bosques fríos, lagos, montañas, glaciares y senderos ventosos",
+      "tone": "amplio, frío, majestuoso y ventoso",
+      "collectibles": [
+        "Escarabajo austral",
+        "Mariposa patagónica",
+        "Libélula de lago frío",
+        "Caracol de bosque austral"
+      ],
+      "priority_species": "Huemul",
+      "robot_enemies": [
+        "Escarabajo de hielo robot",
+        "Cóndor dron patagónico",
+        "Zorro robot de estepa"
+      ],
+      "boss": "Huemul Robot Glacial de Aysén",
+      "medal": "Medalla del Viento y el Glaciar",
+      "temporary_power_or_mechanic": "Impulso de viento patagónico",
+      "main_gameplay_focus": "controlar saltos con viento, rutas amplias y descensos rápidos"
+    },
+    {
+      "order": 7,
+      "id": "magallanes",
+      "region_name": "Región de Magallanes y la Antártica Chilena",
+      "world_name": "Hielo Austral de Magallanes",
+      "main_environment": "estepa patagónica, turberas, fiordos, canales, hielo y bosques subantárticos",
+      "tone": "austral, extremo, helado y final de la ruta sur",
+      "collectibles": [
+        "Escarabajo austral",
+        "Polilla de turbera",
+        "Pequeño invertebrado de turbera",
+        "Mariposa austral"
+      ],
+      "priority_species": "Pingüino de Magallanes",
+      "robot_enemies": [
+        "Pingüino robot deslizante",
+        "Guanaco mecánico de estepa",
+        "Cóndor orbital austral"
+      ],
+      "boss": "Pingüino Robot del Hielo Austral",
+      "medal": "Medalla del Hielo Austral",
+      "temporary_power_or_mechanic": "Botas de hielo antideslizantes",
+      "main_gameplay_focus": "hielo, viento, turberas y superficies resbalosas"
+    },
+    {
+      "order": 8,
+      "id": "maule",
+      "region_name": "Región del Maule",
+      "world_name": "Ríos y Robles del Maule",
+      "main_environment": "ríos, bosque esclerófilo, cordillera, roblerías y humedales interiores",
+      "tone": "transición entre zona central y sur",
+      "collectibles": [
+        "Libélula de humedal",
+        "Ranita de quebrada",
+        "Escarabajo de roble",
+        "Mariposa de río"
+      ],
+      "priority_species": "Loro tricahue",
+      "robot_enemies": [
+        "Libélula robot de río",
+        "Escarabajo mecánico de roble",
+        "Loro dron de eco"
+      ],
+      "boss": "Loro Tricahue Robot del Maule",
+      "medal": "Medalla del Río y el Roble",
+      "temporary_power_or_mechanic": "Tronco flotante temporal",
+      "main_gameplay_focus": "ríos con caudal, troncos flotantes y rutas de bosque central-sur"
+    },
+    {
+      "order": 9,
+      "id": "ohiggins",
+      "region_name": "Región de O'Higgins",
+      "world_name": "Quebradas de O'Higgins",
+      "main_environment": "bosque esclerófilo, ríos, campos, precordillera y quebradas",
+      "tone": "campo, quebrada y precordillera",
+      "collectibles": [
+        "Mariposa de matorral",
+        "Libélula de río",
+        "Lagartija de matorral",
+        "Ranita local"
+      ],
+      "priority_species": "Loro tricahue",
+      "robot_enemies": [
+        "Tricahue dron robot",
+        "Cururo perforador mecánico",
+        "Avispa robótica de campo"
+      ],
+      "boss": "Tricahue Robot de las Quebradas",
+      "medal": "Medalla del Tricahue y la Quebrada",
+      "temporary_power_or_mechanic": "Eco de tricahue para revelar rutas",
+      "main_gameplay_focus": "rutas estrechas, nidos a distancia segura y plataformas de quebrada"
+    },
+    {
+      "order": 10,
+      "id": "metropolitana",
+      "region_name": "Región Metropolitana",
+      "world_name": "Cerros de la Capital Natural",
+      "main_environment": "precordillera, matorral esclerófilo, ríos, cerros isla y quebradas",
+      "tone": "naturaleza cercana a lo urbano",
+      "collectibles": [
+        "Degú",
+        "Cururo",
+        "Lagartija de zona central",
+        "Abeja nativa"
+      ],
+      "priority_species": "Degú",
+      "robot_enemies": [
+        "Cururo robot excavador",
+        "Lagarto robot de piedra",
+        "Dron urbano espacial"
+      ],
+      "boss": "Degú Robot de los Cerros Isla",
+      "medal": "Medalla del Cerro y la Precordillera",
+      "temporary_power_or_mechanic": "Impulso de cerro para descensos",
+      "main_gameplay_focus": "descensos controlados, quebradas conectadas y atajos por cerros"
+    },
+    {
+      "order": 11,
+      "id": "valparaiso",
+      "region_name": "Región de Valparaíso",
+      "world_name": "Acantilados de Valparaíso",
+      "main_environment": "costa, matorral esclerófilo, quebradas, cerros, acantilados e islas",
+      "tone": "vertical, costero e insular",
+      "collectibles": [
+        "Chinita de matorral",
+        "Mariposa costera",
+        "Lagartija de cerro",
+        "Cangrejo pequeño de roca"
+      ],
+      "priority_species": "Picaflor de Juan Fernández",
+      "robot_enemies": [
+        "Gaviota dron",
+        "Picaflor robot insular",
+        "Cangrejo mecánico de roca"
+      ],
+      "boss": "Picaflor Robot de los Acantilados",
+      "medal": "Medalla del Acantilado y la Isla",
+      "temporary_power_or_mechanic": "Cometa costera para planear",
+      "main_gameplay_focus": "verticalidad, viento costero, saltos entre cerros y rutas insulares"
+    },
+    {
+      "order": 12,
+      "id": "coquimbo",
+      "region_name": "Región de Coquimbo",
+      "world_name": "Valles de Coquimbo",
+      "main_environment": "valles transversales, matorral, costa rocosa, cielos limpios y cordillera semiárida",
+      "tone": "semiárido, luminoso y de valles",
+      "collectibles": [
+        "Degú",
+        "Lagartija de matorral",
+        "Escarabajo de valle",
+        "Mariposa de valle"
+      ],
+      "priority_species": "Chinchilla chilena",
+      "robot_enemies": [
+        "Degú mecánico excavador",
+        "Chinchilla robot saltarina",
+        "Cóndor dron lejano"
+      ],
+      "boss": "Chinchilla Robot de los Valles",
+      "medal": "Medalla del Valle y la Chinchilla",
+      "temporary_power_or_mechanic": "Túnel de degú para atajos",
+      "main_gameplay_focus": "atajos subterráneos, matorral seco y rutas de valle"
+    },
+    {
+      "order": 13,
+      "id": "atacama",
+      "region_name": "Región de Atacama",
+      "world_name": "Desierto Florido de Atacama",
+      "main_environment": "desierto florido, quebradas, dunas, costa y valles secos",
+      "tone": "árido que se transforma en colorido",
+      "collectibles": [
+        "Vaquita del desierto",
+        "Escarabajo del desierto florido",
+        "Mariposa del desierto florido",
+        "Lagartija de arena"
+      ],
+      "priority_species": "Vaquita del desierto",
+      "robot_enemies": [
+        "Vaquita robot espacial",
+        "Gusano mecánico de duna",
+        "Flor metálica de energía"
+      ],
+      "boss": "Vaquita Robot del Desierto Florido",
+      "medal": "Medalla del Desierto Florido",
+      "temporary_power_or_mechanic": "Floración temporal de plataformas",
+      "main_gameplay_focus": "activar flores-plataforma, cruzar dunas y revelar rutas en floración"
+    },
+    {
+      "order": 14,
+      "id": "antofagasta",
+      "region_name": "Región de Antofagasta",
+      "world_name": "Camanchaca de Antofagasta",
+      "main_environment": "desierto extremo, costa rocosa, Paposo, camanchaca y salares",
+      "tone": "niebla costera, cobre, salar y desierto extremo",
+      "collectibles": [
+        "Coleóptero desértico",
+        "Lagartija del norte",
+        "Mariposa de oasis",
+        "Araña pequeña de arena"
+      ],
+      "priority_species": "Coleóptero desértico endémico",
+      "robot_enemies": [
+        "Escarabajo de cobre espacial",
+        "Lagartija robot térmica",
+        "Avispa dron de camanchaca"
+      ],
+      "boss": "Escarabajo de Cobre Cósmico",
+      "medal": "Medalla de la Camanchaca y el Cobre",
+      "temporary_power_or_mechanic": "Camanchaca reveladora",
+      "main_gameplay_focus": "niebla que revela plataformas, rutas costeras y zonas de salar"
+    },
+    {
+      "order": 15,
+      "id": "tarapaca",
+      "region_name": "Región de Tarapacá",
+      "world_name": "Espejismos de Tarapacá",
+      "main_environment": "desierto, salares, oasis, quebradas y costa árida",
+      "tone": "calor, espejismos y caminos secos",
+      "collectibles": [
+        "Lagartija nortina",
+        "Escarabajo de desierto",
+        "Araña pequeña árida",
+        "Mariposa de oasis"
+      ],
+      "priority_species": "Lagartija nortina",
+      "robot_enemies": [
+        "Alacrán robot de arena",
+        "Lagarto robot camuflado",
+        "Dron parina de salar"
+      ],
+      "boss": "Lagarto Robot de los Espejismos",
+      "medal": "Medalla del Oasis y el Salar",
+      "temporary_power_or_mechanic": "Cristal anti-espejismo",
+      "main_gameplay_focus": "distinguir plataformas reales de ilusiones y usar a Yuki para detectar rutas"
+    },
+    {
+      "order": 16,
+      "id": "arica_parinacota",
+      "region_name": "Región de Arica y Parinacota",
+      "world_name": "Altiplano de Arica y Parinacota",
+      "main_environment": "altiplano, bofedales, quebradas, desierto costero y valles secos",
+      "tone": "altura, viento, oasis y final norte",
+      "collectibles": [
+        "Picaflor de Arica",
+        "Lagartija del altiplano",
+        "Escarabajo del desierto",
+        "Libélula de bofedal"
+      ],
+      "priority_species": "Picaflor de Arica",
+      "robot_enemies": [
+        "Picaflor dron de alta velocidad",
+        "Escarabajo solar robot",
+        "Lagartija metálica de roca"
+      ],
+      "boss": "Picaflor Cósmico del Altiplano",
+      "medal": "Medalla del Altiplano y el Picaflor",
+      "temporary_power_or_mechanic": "Salto de viento altiplánico",
+      "main_gameplay_focus": "saltos largos con viento, bofedales, altura y plataformas de roca"
+    }
+  ]
+}
