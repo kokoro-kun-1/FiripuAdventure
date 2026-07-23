@@ -119,5 +119,38 @@ func _run_test() -> void:
 		TestUtils.fail(self, TEST_NAME, "medal not obtained")
 		return
 
+	# 6) Verificar que los labels de los coleccionables coincidan con regiones.json.
+	var expected_labels := _arica_collectible_labels()
+	if expected_labels.is_empty():
+		TestUtils.fail(self, TEST_NAME, "no se pudieron leer especies de regiones.json")
+		return
+	var actual_labels: Array[String] = []
+	for c in TestUtils.collectible_nodes(get_tree()):
+		actual_labels.append(String(c.get("label")))
+	if actual_labels.size() != expected_labels.size():
+		TestUtils.fail(self, TEST_NAME, "conteo de especies distinto al JSON")
+		return
+	for e in expected_labels:
+		if not actual_labels.has(e):
+			TestUtils.fail(self, TEST_NAME, "especie faltante o mal etiquetada: %s (escena: %s)" % [e, str(actual_labels)])
+			return
+
 	print(TEST_NAME, ": PASS")
 	get_tree().quit(0)
+
+func _arica_collectible_labels() -> Array[String]:
+	var result: Array[String] = []
+	var file: FileAccess = FileAccess.open("res://data/regiones.json", FileAccess.READ)
+	if file == null:
+		return result
+	var text: String = file.get_as_text()
+	file.close()
+	var parsed: Variant = JSON.parse_string(text)
+	if typeof(parsed) != TYPE_DICTIONARY:
+		return result
+	for region in parsed.regions:
+		if String(region.get("id", "")) == "arica_parinacota":
+			for sp in region.get("collectibles", []):
+				result.append(String(sp))
+			break
+	return result
