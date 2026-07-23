@@ -30,13 +30,32 @@ func _run_test() -> void:
         collectible.call("interact", firipu)
         await get_tree().process_frame
 
-    firipu.call("pick_environment_object", "Piedra de río")
-    await get_tree().process_frame
-
-    firipu.call("obtain_medal")
-    await get_tree().process_frame
-
     var victory_panel: CanvasItem = hud.get_node_or_null("VictoryPanel") as CanvasItem
+    if bool(firipu.get("medal_obtained")) or (victory_panel != null and victory_panel.visible):
+        TestUtils.fail(self, TEST_NAME, "collecting fauna alone must not complete the world")
+        return
+
+    level.call("_on_medal_area_body_entered", firipu)
+    await get_tree().process_frame
+    if bool(firipu.get("medal_obtained")):
+        TestUtils.fail(self, TEST_NAME, "medal must remain locked until boss is defeated")
+        return
+
+    var boss: Node = level.get_node_or_null("BossCosmicBeetle")
+    boss.set("phase", 3)
+    boss.call("expose_core")
+    boss.call("hit_by_environment_object", "Piedra")
+    await get_tree().process_frame
+
+    firipu.call("pick_environment_object", "Piedra de río")
+    level.call("_on_medal_area_body_entered", firipu)
+    await get_tree().process_frame
+
+    if not bool(firipu.get("medal_obtained")):
+        TestUtils.fail(self, TEST_NAME, "medal was not awarded after fauna and boss requirements")
+        return
+
+    victory_panel = hud.get_node_or_null("VictoryPanel") as CanvasItem
     if victory_panel == null or not victory_panel.visible:
         TestUtils.fail(self, TEST_NAME, "victory panel is not visible")
         return
@@ -62,15 +81,20 @@ func _run_test() -> void:
         "Objeto final: Piedra de río",
         "Medalla del Bosque y Río del Biobío",
         "Región protegida: Biobío Silvestre",
-        "Prototipo: 0.1"
+        "Prototipo: 0.2"
     ]
     for fragment in required_fragments:
         if not summary.contains(fragment):
             TestUtils.fail(self, TEST_NAME, "summary missing fragment: %s" % fragment)
             return
 
-    if not next_label.text.contains("próxima región"):
-        TestUtils.fail(self, TEST_NAME, "next-step text is not clear")
+    if not next_label.text.contains("Ñuble desbloqueado"):
+        TestUtils.fail(self, TEST_NAME, "unlocked next region is not clear")
+        return
+
+    var progress := get_node_or_null("/root/GlobalProgress")
+    if progress == null or not bool(progress.call("is_unlocked", "nuble")):
+        TestUtils.fail(self, TEST_NAME, "Ñuble was announced but not unlocked in GlobalProgress")
         return
 
     var exit_requested := false

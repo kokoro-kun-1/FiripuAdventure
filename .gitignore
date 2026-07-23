@@ -105,6 +105,8 @@ builds_test/
 *.css
 *.js
 *.json
+!data/
+!data/regiones.json
 *.yaml
 *.yml
 *.toml

@@ -20,6 +20,7 @@ const SAVE_PATH := "user://global_progress.save"
 
 var _data: Dictionary = {}
 var _dirty: bool = false
+var _last_played_world := ""
 
 func _ready() -> void:
 	load_progress()
@@ -79,6 +80,25 @@ func get_world_progress(world_id: String) -> Dictionary:
 func get_all_progress() -> Dictionary:
 	return _data.duplicate(true)
 
+func get_unlocked_worlds() -> Array[String]:
+	var result: Array[String] = []
+	for region in _load_regions_json():
+		var world_id := String(region.get("id", ""))
+		if is_unlocked(world_id):
+			result.append(world_id)
+	return result
+
+func get_completed_worlds() -> Array[String]:
+	var result: Array[String] = []
+	for region in _load_regions_json():
+		var world_id := String(region.get("id", ""))
+		if is_completed(world_id):
+			result.append(world_id)
+	return result
+
+func get_last_played_world() -> String:
+	return _last_played_world
+
 ## Llamadas desde niveles
 
 func register_world_start(world_id: String) -> void:
@@ -86,6 +106,7 @@ func register_world_start(world_id: String) -> void:
 		_data[world_id] = {"unlocked": true, "completed": false, "collectibles": {}, "medal": false}
 	else:
 		_data[world_id].unlocked = true
+	_last_played_world = world_id
 	_dirty = true
 
 func register_collectible(world_id: String, label: String) -> void:
@@ -136,7 +157,10 @@ func save_progress() -> void:
 	if file == null:
 		push_error("GlobalProgress: no se pudo guardar en " + SAVE_PATH)
 		return
-	file.store_string(JSON.stringify(_data, "\t"))
+	file.store_string(JSON.stringify({
+		"worlds": _data,
+		"last_played_world": _last_played_world,
+	}, "	"))
 	file.close()
 	_dirty = false
 	print("GlobalProgress: guardado en " + SAVE_PATH)
@@ -153,7 +177,13 @@ func load_progress() -> void:
 	file.close()
 	var parsed: Variant = JSON.parse_string(text)
 	if typeof(parsed) == TYPE_DICTIONARY:
-		_data = parsed
+		if parsed.has("worlds"):
+			_data = parsed.get("worlds", {})
+			_last_played_world = String(parsed.get("last_played_world", ""))
+		else:
+			# Migración transparente del formato anterior.
+			_data = parsed
+			_last_played_world = ""
 		print("GlobalProgress: cargado desde " + SAVE_PATH)
 	else:
 		push_error("GlobalProgress: archivo corrupto")
@@ -162,6 +192,7 @@ func load_progress() -> void:
 
 func reset_all() -> void:
 	_data.clear()
+	_last_played_world = ""
 	_dirty = true
 	_ensure_all_worlds_exist()
 	save_progress()

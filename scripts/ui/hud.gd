@@ -107,6 +107,8 @@ func bind_player(player: Node) -> void:
         player.movement_state_changed.connect(_on_movement_state_changed)
     if player.has_signal("prototype_completed"):
         player.prototype_completed.connect(show_victory)
+    if player.has_signal("species_registered"):
+        player.species_registered.connect(_on_species_registered)
 
 func start_game() -> void:
     if game_started:
@@ -211,7 +213,7 @@ func show_victory() -> void:
         audio.play_sfx("victory", 0.8)
     victory_title_label.text = "¡Mundo 1 completado!"
     victory_summary_label.text = get_victory_summary()
-    victory_next_label.text = "Siguiente paso: en una futura versión se desbloqueará la próxima región de Chile.\nPuede seguir explorando, guardar la partida o salir del prototipo."
+    victory_next_label.text = "¡Ñuble desbloqueado! Puede seguir explorando, guardar la partida o volver al menú desde pausa."
     victory_panel.visible = true
     victory_continue_button.grab_focus()
 
@@ -219,7 +221,7 @@ func get_victory_summary() -> String:
     var object_text := latest_object
     if object_text.strip_edges() == "" or object_text == "Ninguno":
         object_text = "Sin objeto equipado al cierre"
-    return "Resumen de aventura\n• Diario de Naturaleza: " + str(latest_count) + "/" + str(latest_total) + " especies registradas\n• Objeto final: " + object_text + "\n• Estado de medalla: " + latest_medal + "\n• Medalla del Bosque y Río del Biobío\n• Región protegida: Biobío Silvestre\n• Prototipo: 0.1"
+    return "Resumen de aventura\n• Diario de Naturaleza: " + str(latest_count) + "/" + str(latest_total) + " especies registradas\n• Objeto final: " + object_text + "\n• Estado de medalla: " + latest_medal + "\n• Medalla del Bosque y Río del Biobío\n• Región protegida: Biobío Silvestre\n• Prototipo: 0.2"
 
 func _on_collected_changed(count: int, total: int) -> void:
     latest_count = count
@@ -240,3 +242,18 @@ func _on_medal_state_changed(text: String) -> void:
 func _on_movement_state_changed(text: String) -> void:
     if state_label:
         state_label.text = "Estado: " + text
+
+func _on_species_registered(label: String) -> void:
+    var diary_nodes := {
+        "Chinita": "DiaryChinita",
+        "Abejorro": "DiaryAbejorro",
+        "Libélula": "DiaryLibelula",
+        "Ranita pequeña": "DiaryRanita",
+    }
+    var node_name: String = diary_nodes.get(label, "")
+    if node_name.is_empty():
+        return
+    var entry := get_node_or_null("DiaryPanel/DiaryVBox/" + node_name) as Label
+    if entry:
+        entry.text = "✓ " + label
+        entry.add_theme_color_override("font_color", Color(0.55, 0.92, 0.62, 1.0))

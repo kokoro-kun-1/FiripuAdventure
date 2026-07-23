@@ -38,6 +38,8 @@ if command -v cygpath >/dev/null 2>&1; then
 fi
 
 TEST_SCENES=(
+  "res://tests/biobio_structure_test.tscn"
+  "res://tests/main_menu_flow_test.tscn"
   "res://tests/save_load_test.tscn"
   "res://tests/save_version_mismatch_test.tscn"
   "res://tests/save_collectible_test.tscn"
@@ -89,15 +91,16 @@ sleep 1
 overall=0
 for scene in "${TEST_SCENES[@]}"; do
   printf 'test: %s\n' "$scene"
-  # Lanzar Godot en foreground (bloquea el shell en git-bash/MSYS) y esperar
-  # explícitamente el PID para garantizar que el proceso termine (quit) antes
-  # del siguiente test, evitando solapamiento de procesos headless colgados.
-  "$GODOT_BIN" --headless --path "$PROJECT_DIR" "$scene" >/tmp/firipu_test_out.log 2>&1 &
-  godot_pid=$!
-  wait "$godot_pid" 2>/dev/null || true
+  # Cada escena debe terminar por sí sola; el timeout evita que un test
+  # defectuoso congele toda la suite.
+  timeout 90 "$GODOT_BIN" --headless --path "$PROJECT_DIR" "$scene" >/tmp/firipu_test_out.log 2>&1
+  test_rc=$?
   # Godot headless: los tests hacen quit(0) e imprimen "<NAME>: PASS".
   # Los errores de dummy-renderer ("Parameter m is null") no son fallos de logica.
-  if grep -qiE "FAIL|not found|Parse Error|SCRIPT ERROR" /tmp/firipu_test_out.log; then
+  if [ "$test_rc" -eq 124 ]; then
+    printf '  RESULT: FAIL (timeout)\n\n'
+    overall=1
+  elif grep -qiE "FAIL|not found|Parse Error|SCRIPT ERROR" /tmp/firipu_test_out.log; then
     printf '  RESULT: FAIL\n\n'
     overall=1
   elif grep -qE ": PASS" /tmp/firipu_test_out.log; then
@@ -108,8 +111,9 @@ for scene in "${TEST_SCENES[@]}"; do
     # flaky del entorno (un fallo real con FAIL/Parse Error NO llega aqui).
     _kill_godot
     sleep 1
-    "$GODOT_BIN" --headless --path "$PROJECT_DIR" "$scene" >/tmp/firipu_test_out.log 2>&1
-    if grep -qE ": PASS" /tmp/firipu_test_out.log; then
+    timeout 90 "$GODOT_BIN" --headless --path "$PROJECT_DIR" "$scene" >/tmp/firipu_test_out.log 2>&1
+    retry_rc=$?
+    if [ "$retry_rc" -ne 124 ] && grep -qE ": PASS" /tmp/firipu_test_out.log; then
       printf '  RESULT: PASS (retry)\n\n'
     else
       printf '  RESULT: FAIL (no PASS marker tras reintento — posible cuelgue/timeout)\n\n'
